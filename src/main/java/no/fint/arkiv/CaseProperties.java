@@ -5,10 +5,11 @@ import lombok.Data;
 @Data
 public class CaseProperties {
     private String administrativEnhet;
+    private String journalenhet;
     private String arkivdel;
     private String[] noekkelord;
-    private String klassifikasjon;
-    private String klasse;
+    private String[] klassifikasjon;
+    private String[] klasse;
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
@@ -16,4 +17,6 @@ public class CaseProperties {
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;
+    private String tilgangsrestriksjon;
+    private String saksmappeType;
 }
