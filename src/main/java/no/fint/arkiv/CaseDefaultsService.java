@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
 public abstract class CaseDefaultsService {
@@ -12,21 +13,28 @@ public abstract class CaseDefaultsService {
         if (properties == null) {
             return;
         }
-        if (resource.getSaksstatus().isEmpty()) {
+        if (isNotBlank(properties.getSaksstatus()) && resource.getSaksstatus().isEmpty()) {
             resource.addSaksstatus(Link.with(
                     Saksstatus.class,
                     "systemid",
                     properties.getSaksstatus()
             ));
         }
-        if (resource.getArkivdel().isEmpty()) {
+        if (isNotBlank(properties.getArkivdel()) && resource.getArkivdel().isEmpty()) {
             resource.addArkivdel(Link.with(
                     Arkivdel.class,
                     "systemid",
                     properties.getArkivdel()
             ));
         }
-        if (resource.getAdministrativEnhet().isEmpty()) {
+        if (isNotBlank(properties.getJournalenhet()) && resource.getJournalenhet().isEmpty()) {
+            resource.addJournalenhet(Link.with(
+                    AdministrativEnhet.class,
+                    "systemid",
+                    properties.getJournalenhet()
+            ));
+        }
+        if (isNotBlank(properties.getAdministrativEnhet()) && resource.getAdministrativEnhet().isEmpty()) {
             resource.addAdministrativEnhet(Link.with(
                     AdministrativEnhet.class,
                     "systemid",
@@ -45,7 +53,7 @@ public abstract class CaseDefaultsService {
         }
         resource.getJournalpost().forEach(journalpost -> {
             journalpost.getKorrespondansepart().forEach(korrespondanse -> {
-                if (korrespondanse.getKorrespondanseparttype().isEmpty()) {
+                if (isNotBlank(properties.getKorrespondansepartType()) && korrespondanse.getKorrespondanseparttype().isEmpty()) {
                     korrespondanse.addKorrespondanseparttype(Link.with(
                             KorrespondansepartType.class,
                             "systemid",
@@ -53,21 +61,21 @@ public abstract class CaseDefaultsService {
                 }
             });
             journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> {
-                if (dokumentbeskrivelse.getDokumentstatus().isEmpty()) {
+                if (isNotBlank(properties.getDokumentstatus()) && dokumentbeskrivelse.getDokumentstatus().isEmpty()) {
                     dokumentbeskrivelse.addDokumentstatus(Link.with(
                             DokumentStatus.class,
                             "systemid",
                             properties.getDokumentstatus()
                     ));
                 }
-                if (dokumentbeskrivelse.getDokumentType().isEmpty()) {
+                if (isNotBlank(properties.getDokumentType()) && dokumentbeskrivelse.getDokumentType().isEmpty()) {
                     dokumentbeskrivelse.addDokumentType(Link.with(
                             DokumentType.class,
                             "systemid",
                             properties.getDokumentType()
                     ));
                 }
-                if (dokumentbeskrivelse.getTilknyttetRegistreringSom().isEmpty()) {
+                if (isNotBlank(properties.getTilknyttetRegistreringSom()) && dokumentbeskrivelse.getTilknyttetRegistreringSom().isEmpty()) {
                     dokumentbeskrivelse.addTilknyttetRegistreringSom(Link.with(
                             TilknyttetRegistreringSom.class,
                             "systemid",
@@ -75,33 +83,33 @@ public abstract class CaseDefaultsService {
                     ));
                 }
             });
-            if (journalpost.getJournalposttype().isEmpty()) {
+            if (isNotBlank(properties.getJournalpostType()) && journalpost.getJournalposttype().isEmpty()) {
                 journalpost.addJournalposttype(Link.with(
                         JournalpostType.class,
                         "systemid",
                         properties.getJournalpostType()));
             }
-            if (journalpost.getJournalstatus().isEmpty()) {
+            if (isNotBlank(properties.getJournalstatus()) && journalpost.getJournalstatus().isEmpty()) {
                 journalpost.addJournalstatus(Link.with(
                         JournalStatus.class,
                         "systemid",
                         properties.getJournalstatus()));
             }
-            if (journalpost.getJournalenhet().isEmpty()) {
+            if (isNotBlank(properties.getJournalenhet()) && journalpost.getJournalenhet().isEmpty()) {
                 journalpost.addJournalenhet(Link.with(
                         AdministrativEnhet.class,
                         "systemid",
-                        properties.getAdministrativEnhet()
+                        properties.getJournalenhet()
                 ));
             }
-            if (journalpost.getAdministrativEnhet().isEmpty()) {
+            if (isNotBlank(properties.getAdministrativEnhet()) && journalpost.getAdministrativEnhet().isEmpty()) {
                 journalpost.addAdministrativEnhet(Link.with(
                         AdministrativEnhet.class,
                         "systemid",
                         properties.getAdministrativEnhet()
                 ));
             }
-            if (journalpost.getArkivdel().isEmpty()) {
+            if (isNotBlank(properties.getArkivdel()) && journalpost.getArkivdel().isEmpty()) {
                 journalpost.addArkivdel(Link.with(
                         Arkivdel.class,
                         "systemid",
