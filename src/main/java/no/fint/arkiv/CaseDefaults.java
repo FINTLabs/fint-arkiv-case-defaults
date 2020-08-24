@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @EnableConfigurationProperties
-@ConfigurationProperties(prefix = "fint.arkiv.defaults")
+@ConfigurationProperties(prefix = "fint.case.defaults")
 public class CaseDefaults {
     private CaseProperties tilskuddfartoy;
 }
