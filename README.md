@@ -8,6 +8,7 @@ applied by the adapter if these values have not been set by the client.
 ## Case Types
 
 - `tilskuddfartoy`
+- `personalmappe`
 
 ## Properties for each case type
 
