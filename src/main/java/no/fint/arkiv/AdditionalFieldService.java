@@ -46,7 +46,7 @@ public class AdditionalFieldService {
                         substitutor.replace(e.getValue())));
     }
 
-    public <U> void parseFields(U resource, List<Field> fields) {
+    public <U> void setFieldsForResource(U resource, List<Field> fields) {
         if (fieldFormats == null || fields == null || fields.isEmpty()) {
             return;
         }
@@ -62,7 +62,7 @@ public class AdditionalFieldService {
                 .filter(f -> fieldMap.containsKey(f.getName()))
                 .forEach(f -> {
                     final String format = fieldMap.get(f.getName());
-                    log.debug("Parsing field {} -> {} -> {}", f.getName(), format, f.getValue());
+                    log.debug("Parsing field {} -> {} -> {}", f.getName(), f.getValue(), format);
                     List<String> nameList = getNameList(names, format);
                     Matcher fieldMatcher = getFieldMatcher(names, format, f.getValue());
                     if (fieldMatcher.matches()) {

@@ -30,7 +30,7 @@ public class TitleService {
             throw new IllegalArgumentException("No format defined for " + type);
         }
         String title = new StringSubstitutor(new BeanPropertyLookup<>(object)).replace(titles.get(type));
-        log.info("Title: '{}'", title);
+        log.debug("Title: '{}'", title);
         return title;
     }
 
@@ -40,12 +40,12 @@ public class TitleService {
 
     public void parseTitle(Object object, String title) {
         if (titles == null){
-            log.warn("No formats defined!");
+            log.debug("No formats defined!");
             return;
         }
         String format = titles.get(resourceName(object));
         if (StringUtils.isBlank(format)) {
-            log.warn("No format defined for {}", resourceName(object));
+            log.debug("No format defined for {}", resourceName(object));
             return;
         }
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
@@ -62,6 +62,7 @@ public class TitleService {
         if (titleMatcher.matches()) {
             for (int i = 1; i <= titleMatcher.groupCount(); ++i) {
                 try {
+                    log.debug("Setting property {} to {}", nameList.get(i-1), titleMatcher.group(i));
                     BeanUtils.setProperty(object, nameList.get(i-1), titleMatcher.group(i));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
