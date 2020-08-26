@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "fint.case.defaults")
 public class CaseDefaults {
-    private CaseProperties 
-        tilskuddfartoy,
-        personalmappe;
+    private CaseProperties
+            tilskuddfartoy,
+            tilskuddfredahusprivateie,
+            personalmappe;
 }
