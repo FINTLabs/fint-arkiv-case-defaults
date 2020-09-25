@@ -1,0 +1,78 @@
+[
+  {
+    "kode": "M082",
+    "navn": "journalposttype",
+    "verdier": [
+      "Inngående dokument",
+      "Utgående dokument",
+      "Organinternt dokument for oppfølging",
+      "Organinternt dokument uten oppfølging",
+      "Saksframlegg"
+    ]
+  },
+  {
+    "kode": "M217",
+    "navn": "tilknyttetRegistreringSom",
+    "verdier": [
+      "Hoveddokument",
+      "Vedlegg"
+    ]
+  },
+  {
+    "kode": "M087",
+    "navn": "korrespondanseparttype",
+    "verdier": [
+      "Avsender",
+      "Mottaker",
+      "Kopimottaker",
+      "Gruppemottaker",
+      "Intern avsender",
+      "Intern mottaker"
+    ]
+  },
+  {
+    "kode": "M053",
+    "navn": "journalstatus",
+    "verdier": [
+      "Journalført",
+      "Ekspedert",
+      "Arkivert",
+      "Utgår"
+    ]
+  },
+  {
+    "kode": "M502",
+    "navn": "skjermingMetadata",
+    "verdier": [
+      "Skjerming klasseID",
+      "Skjerming tittel klasse",
+      "Skjerming tittel mappe - unntatt første linje",
+      "Skjerming tittel mappe - utvalgte ord",
+      "Skjerming navn part i sak",
+      "Skjerming tittel registrering - unntatt første linje",
+      "Skjerming tittel registrering - utvalgte ord",
+      "Skjerming navn avsender",
+      "Skjerming navn mottaker",
+      "Skjerming tittel dokumentbeskrivelse",
+      "Skjerming merknadstekst",
+      "Midlertidig skjerming"
+    ]
+  },
+  {
+    "kode": "M503",
+    "navn": "skjermingDokument",
+    "verdier": [
+      "Skjerming av hele dokumentet",
+      "Skjerming av deler av dokumentet"
+    ]
+  },
+  {
+    "kode": "M700",
+    "navn": "variantformat",
+    "verdier": [
+      "Produksjonsformat",
+      "Arkivformat",
+      "Dokument hvor deler av innholdet er skjermet"
+    ]
+  }
+]
