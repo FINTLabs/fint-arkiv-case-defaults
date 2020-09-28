@@ -8,6 +8,6 @@ import java.util.Map;
 public class NoarkMetadata {
     private String kode;
     private String navn;
-    private Boolean obligatorisk;
+    private boolean obligatorisk;
     private Map<String,String> verdier;
 }

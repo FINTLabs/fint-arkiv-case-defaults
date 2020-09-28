@@ -32,21 +32,21 @@ public class NoarkMetadataService {
     @PostConstruct
     public void init() throws IOException {
         NoarkMetadata[] noarkMetadata = new ObjectMapper().readValue(resource.getInputStream(), NoarkMetadata[].class);
-        metadata = Arrays.stream(noarkMetadata).collect(Collectors.toMap(NoarkMetadata::getKode, Function.identity()));
+        metadata = Arrays.stream(noarkMetadata).collect(Collectors.toMap(NoarkMetadata::getNavn, Function.identity()));
     }
 
     public Stream<JournalpostTypeResource> getJournalpostType() {
-        return metadata.get("M082").getVerdier().entrySet().stream()
+        return metadata.get("journalposttype").getVerdier().entrySet().stream()
                 .map(create(JournalpostTypeResource::new));
     }
 
     public Stream<TilknyttetRegistreringSomResource> getTilknyttetRegistreringSom() {
-        return metadata.get("M217").getVerdier().entrySet().stream()
+        return metadata.get("tilknyttetRegistreringSom").getVerdier().entrySet().stream()
                 .map(create(TilknyttetRegistreringSomResource::new));
     }
 
     public Stream<KorrespondansepartTypeResource> getKorrespondansepartType() {
-        return metadata.get("M087").getVerdier().entrySet().stream()
+        return metadata.get("korrespondanseparttype").getVerdier().entrySet().stream()
                 .map(create(KorrespondansepartTypeResource::new));
     }
 

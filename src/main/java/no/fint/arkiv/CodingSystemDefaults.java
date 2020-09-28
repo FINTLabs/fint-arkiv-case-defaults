@@ -12,11 +12,20 @@ import java.util.Map;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "fint.case.coding")
 public class CodingSystemDefaults {
+    private boolean fatal;
     private Map<String,String>
-            journalposttype,
+            saksstatus,
             journalstatus,
-            tilknyttetregistreringsom,
+            dokumentstatus,
+            journalposttype,
+            dokumenttype,
+            klassifikasjonstype,
             korrespondanseparttype,
+            tilknyttetRegistreringSom,
+            partRolle,
+            skjermingMetadata,
+            skjermingDokument,
+            gradering,
             variantformat;
 
 }
