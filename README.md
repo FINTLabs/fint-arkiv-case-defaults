@@ -83,5 +83,6 @@ be thrown if any mappings are missing.
 
 To perform metadata mapping, invoke `CodingSystemService.mapCodingSystemLinks(FintLinks resource)` on the resources
 before submitting to the implementing system.
+*NOTE:* This is done automatically by `CaseDefaultsService`.
 
 Furthermore, to expose the standard coding system values, use the functions in `NoarkMetadataService`.
