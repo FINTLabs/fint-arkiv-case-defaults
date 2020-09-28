@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-import java.util.stream.Collectors
-
 @SpringBootTest(classes = [CodingSystemDefaults, CodingSystemService, NoarkMetadataService])
 @ActiveProfiles(['spock'])
 class CodingSystemSpec extends Specification {
@@ -28,28 +26,17 @@ class CodingSystemSpec extends Specification {
     @Autowired
     NoarkMetadataService noarkMetadataService
 
-    def "Able to supply stream of JournalpostType"() {
-        when:
-        def result = noarkMetadataService.journalpostType.collect(Collectors.toList())
-
-        then:
-        result.any { it.navn == 'Inngående dokument' }
-    }
-
-    def "Able to supply stream of TilknyttetRegistreringSom"() {
-        when:
-        def result = noarkMetadataService.tilknyttetRegistreringSom.collect(Collectors.toList())
-
-        then:
-        result.any { it.navn == 'Hoveddokument' }
-    }
-
-    def 'Able to supply stream of KorrespondansepartType'() {
-        when:
-        def result = noarkMetadataService.korrespondansepartType.collect(Collectors.toList())
-
-        then:
-        result.any { it.navn == 'Avsender' }
+    def 'Verify all metadata streams are supported'() {
+        expect:
+        noarkMetadataService.saksStatus.anyMatch {it.navn == 'Under behandling'}
+        noarkMetadataService.journalStatus.anyMatch {it.navn == 'Godkjent av leder'}
+        noarkMetadataService.dokumentStatus.anyMatch {it.navn == 'Dokumentet er ferdigstilt'}
+        noarkMetadataService.journalpostType.anyMatch {it.navn == 'Inngående dokument'}
+        noarkMetadataService.dokumentType.anyMatch {it.navn == 'Brev'}
+        noarkMetadataService.korrespondansepartType.anyMatch {it.navn == 'Intern avsender'}
+        noarkMetadataService.tilknyttetRegistreringSom.anyMatch {it.navn == 'Hoveddokument'}
+        noarkMetadataService.partRolle.anyMatch {it.navn == 'Klient'}
+        noarkMetadataService.variantformat.anyMatch {it.navn == 'Arkivformat'}
     }
 
     def "Able to get definition of metadata M082"() {
