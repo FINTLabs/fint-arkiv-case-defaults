@@ -20,30 +20,34 @@ class CodingSystemSpec extends Specification {
     @Autowired
     NoarkMetadataService noarkMetadataService
 
-    def "Able to decode coding system values"() {
-        expect:
-        codingSystemDefaults.journalposttype.any {it.code == 'Inngående dokument' && it.value == '110'}
-        codingSystemDefaults.tilknyttetregistreringsom.any { it.code == 'Hoveddokument' && it.value == '1'}
-    }
-
     def "Able to supply stream of JournalpostType"() {
         when:
-        def result = codingSystemService.journalpostType.collect(Collectors.toList())
+        def result = noarkMetadataService.journalpostType.collect(Collectors.toList())
 
         then:
-        result.any {it.kode == 'Inngående dokument'}
+        result.any { it.navn == 'Inngående dokument' }
     }
 
     def "Able to supply stream of TilknyttetRegistreringSom"() {
         when:
-        def result = codingSystemService.tilknyttetRegistreringSom.collect(Collectors.toList())
+        def result = noarkMetadataService.tilknyttetRegistreringSom.collect(Collectors.toList())
 
         then:
-        result.any {it.kode == 'Hoveddokument'}
+        result.any { it.navn == 'Hoveddokument' }
+    }
+
+    def 'Able to supply stream of KorrespondansepartType'() {
+        when:
+        def result = noarkMetadataService.korrespondansepartType.collect(Collectors.toList())
+
+        then:
+        result.any { it.navn == 'Avsender' }
     }
 
     def "Able to get definition of metadata M082"() {
         expect:
-        noarkMetadataService.metadata.get("M082").navn == "journalposttype"
+        noarkMetadataService.metadata['M082'].navn == "journalposttype"
+        noarkMetadataService.metadata['M082'].obligatorisk
+        noarkMetadataService.metadata['M082'].verdier['I'] == 'Inngående dokument'
     }
 }
