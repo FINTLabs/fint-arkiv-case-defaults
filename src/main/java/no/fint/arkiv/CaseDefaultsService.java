@@ -4,10 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
 public abstract class CaseDefaultsService {
+
+    @Autowired
+    private CodingSystemService codingSystemService;
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -45,6 +50,7 @@ public abstract class CaseDefaultsService {
     }
 
     public void applyDefaultsForUpdate(CaseProperties properties, SaksmappeResource resource) {
+        codingSystemService.mapCodingSystemLinks(resource);
         if (properties == null) {
             return;
         }
@@ -52,6 +58,7 @@ public abstract class CaseDefaultsService {
             return;
         }
         resource.getJournalpost().forEach(journalpost -> {
+            codingSystemService.mapCodingSystemLinks(journalpost);
             journalpost.getKorrespondansepart().forEach(korrespondanse -> {
                 if (isNotBlank(properties.getKorrespondansepartType()) && korrespondanse.getKorrespondanseparttype().isEmpty()) {
                     korrespondanse.addKorrespondanseparttype(Link.with(
@@ -61,6 +68,7 @@ public abstract class CaseDefaultsService {
                 }
             });
             journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> {
+                codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
                 if (isNotBlank(properties.getDokumentstatus()) && dokumentbeskrivelse.getDokumentstatus().isEmpty()) {
                     dokumentbeskrivelse.addDokumentstatus(Link.with(
                             DokumentStatus.class,
