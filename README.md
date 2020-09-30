@@ -44,6 +44,15 @@ This is controlled by the following properties:
  
 Properties in the `${name}` format will be evaluated and parsed. 
 
+### How to implement in adapter
+
+1. Add `compile('no.fint:fint-arkiv-case-defaults:+')` to `build.gradle`
+2. `@Autowired TitleService` in case mapping code.
+3. Obtain a `TitleMapper` instance using `TitleService.getTitleMapper()`
+4. Writing: Invoke `getXxxTitle()` methods on `TitleMapper` to create case, record, and document titles.
+5. Reading: Invoke `parseXxxTitle()` methods on `TitleMapper` to apply case, record, and document properties from their
+   corresponding titles. 
+
 ## AdditionalFieldService
 
 This service is used to apply custom attributes (additional fields) in the system specific objects
