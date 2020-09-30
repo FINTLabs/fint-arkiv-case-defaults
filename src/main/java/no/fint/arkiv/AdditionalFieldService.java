@@ -62,7 +62,7 @@ public class AdditionalFieldService {
                 .filter(f -> fieldMap.containsKey(f.getName()))
                 .forEach(f -> {
                     final String format = fieldMap.get(f.getName());
-                    log.debug("Parsing field {} -> {} -> {}", f.getName(), f.getValue(), format);
+                    log.trace("Parsing field {} -> {} -> {}", f.getName(), f.getValue(), format);
                     List<String> nameList = getNameList(names, format);
                     Matcher fieldMatcher = getFieldMatcher(names, format, f.getValue());
                     if (fieldMatcher.matches()) {
@@ -90,7 +90,7 @@ public class AdditionalFieldService {
         while (nameMatcher.find()) {
             nameList.add(nameMatcher.group(1));
         }
-        log.debug("nameList = {}", nameList);
+        log.trace("nameList = {}", nameList);
         return nameList;
     }
 

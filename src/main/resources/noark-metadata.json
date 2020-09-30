@@ -1,0 +1,162 @@
+[
+  {
+    "kode": "M052",
+    "navn": "saksstatus",
+    "obligatorisk": true,
+    "verdier": {
+      "B": "Under behandling",
+      "A": "Avsluttet",
+      "U": "Utgår",
+      "R": "Opprettet av saksbehandler",
+      "S": "Avsluttet av saksbehandler",
+      "P": "Unntatt prosesstyring",
+      "F": "Ferdig fra saksbehandler"
+    }
+  },
+  {
+    "kode": "M053",
+    "navn": "journalstatus",
+    "obligatorisk": true,
+    "verdier": {
+      "J": "Journalført",
+      "F": "Ferdigstilt fra saksbehandler",
+      "G": "Godkjent av leder",
+      "E": "Ekspedert",
+      "A": "Arkivert",
+      "U": "Utgår",
+      "R": "Reservert dokument"
+    }
+  },
+  {
+    "kode": "M054",
+    "navn": "dokumentstatus",
+    "obligatorisk": true,
+    "verdier": {
+      "B": "Dokumentet er under redigering",
+      "F": "Dokumentet er ferdigstilt"
+    }
+  },
+  {
+    "kode": "M082",
+    "navn": "journalposttype",
+    "obligatorisk": true,
+    "verdier": {
+      "I": "Inngående dokument",
+      "U": "Utgående dokument",
+      "N": "Organinternt dokument for oppfølging",
+      "X": "Organinternt dokument uten oppfølging",
+      "S": "Saksframlegg"
+    }
+  },
+  {
+    "kode": "M083",
+    "navn": "dokumenttype",
+    "obligatorisk": false,
+    "verdier": {
+      "B": "Brev",
+      "R": "Rundskriv",
+      "F": "Faktura",
+      "O": "Ordrebekreftelse"
+    }
+  },
+  {
+    "kode": "M086",
+    "navn": "klassifikasjonstype",
+    "obligatorisk": false,
+    "verdier": {
+      "GBN": "Gårds- og bruksnummer",
+      "FH": "Funksjonsbasert, hierarkisk",
+      "EH": "Emnebasert, hierarkisk arkivnøkkel",
+      "E1": "Emnebasert, ett nivå",
+      "KK": "K-koder",
+      "MF": "Mangefasettert, ikke hierarki",
+      "UO": "Objektbasert",
+      "PNR": "Fødselsnummer"
+    }
+  },
+  {
+    "kode": "M087",
+    "navn": "korrespondanseparttype",
+    "obligatorisk": true,
+    "verdier": {
+      "EA": "Avsender",
+      "EM": "Mottaker",
+      "EK": "Kopimottaker",
+      "GM": "Gruppemottaker",
+      "IA": "Intern avsender",
+      "IM": "Intern mottaker",
+      "IK": "Intern kopimottaker"
+    }
+  },
+  {
+    "kode": "M217",
+    "navn": "tilknyttetRegistreringSom",
+    "obligatorisk": true,
+    "verdier": {
+      "H": "Hoveddokument",
+      "V": "Vedlegg"
+    }
+  },
+  {
+    "kode": "M303",
+    "navn": "partRolle",
+    "obligatorisk": false,
+    "verdier": {
+      "KLI": "Klient",
+      "PÅ": "Pårørende",
+      "FORM": "Formynder",
+      "ADV": "Advokat"
+    }
+  },
+  {
+    "kode": "M502",
+    "navn": "skjermingMetadata",
+    "obligatorisk": true,
+    "verdier": {
+      "KID": "Skjerming klasseID",
+      "TKL": "Skjerming tittel klasse",
+      "TM1": "Skjerming tittel mappe - unntatt første linje",
+      "TMO": "Skjerming tittel mappe - utvalgte ord",
+      "NPS": "Skjerming navn part i sak",
+      "TR1": "Skjerming tittel registrering - unntatt første linje",
+      "TRO": "Skjerming tittel registrering - utvalgte ord",
+      "NA": "Skjerming navn avsender",
+      "NM": "Skjerming navn mottaker",
+      "TD": "Skjerming tittel dokumentbeskrivelse",
+      "MT": "Skjerming merknadstekst",
+      "M": "Midlertidig skjerming"
+    }
+  },
+  {
+    "kode": "M503",
+    "navn": "skjermingDokument",
+    "obligatorisk": true,
+    "verdier": {
+      "H": "Skjerming av hele dokumentet",
+      "D": "Skjerming av deler av dokumentet"
+    }
+  },
+  {
+    "kode": "M506",
+    "navn": "gradering",
+    "obligatorisk": true,
+    "verdier": {
+      "SH": "Strengt hemmelig (sikkerhetsgrad)",
+      "H": "Hemmelig (sikkerhetsgrad)",
+      "K": "Konfidensielt (sikkerhetsgrad)",
+      "B": "Begrenset (sikkerhetsgrad)",
+      "F": "Fortrolig (beskyttelsesgrad)",
+      "SF": "Strengt fortrolig (beskyttelsesgrad)"
+    }
+  },
+  {
+    "kode": "M700",
+    "navn": "variantformat",
+    "obligatorisk": true,
+    "verdier": {
+      "P": "Produksjonsformat",
+      "A": "Arkivformat",
+      "O": "Dokument hvor deler av innholdet er skjermet"
+    }
+  }
+]
