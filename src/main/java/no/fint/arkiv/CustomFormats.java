@@ -12,6 +12,6 @@ import java.util.Map;
 @EnableConfigurationProperties
 @ConfigurationProperties("fint.case.formats")
 public class CustomFormats {
-    private Map<String, String> title;
+    private Map<String, Title> title;
     private Map<String, Map<String, String>> field;
 }

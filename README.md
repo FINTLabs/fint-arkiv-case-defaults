@@ -34,11 +34,15 @@ applied by the adapter if these values have not been set by the client.
 
 ## TitleService
 
-This service is used to set the format for cases based on case properties.  
-It is bidirectional, meaning case properties can also be parsed and applied from the title.
+This service formats titles for cases, records and documents for different case types based on case properties.  
+It is bidirectional, meaning case, record and document properties can be parsed and applied from the title.
 
-This is controlled by the property `fint.case.formats.title.<casetype>`.  Properties in the `${name}` 
-format will be evaluated and parsed. 
+This is controlled by the following properties:
+- `fint.case.formats.title.<casetype>.cases`
+- `fint.case.formats.title.<casetype>.records`
+- `fint.case.formats.title.<casetype>.documents`
+ 
+Properties in the `${name}` format will be evaluated and parsed. 
 
 ## AdditionalFieldService
 
