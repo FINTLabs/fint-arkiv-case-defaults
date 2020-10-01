@@ -18,9 +18,11 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleService {
 
+    private final LinkResolver resolver;
     private final Map<String,String> titles;
 
-    public TitleService(CustomFormats formats) {
+    public TitleService(LinkResolver resolver, CustomFormats formats) {
+        this.resolver = resolver;
         this.titles = formats.getTitle();
     }
 
@@ -29,7 +31,7 @@ public class TitleService {
         if (!titles.containsKey(type)) {
             throw new IllegalArgumentException("No format defined for " + type);
         }
-        String title = new StringSubstitutor(new BeanPropertyLookup<>(object)).replace(titles.get(type));
+        String title = new StringSubstitutor(new BeanPropertyLookup<>(resolver, object)).replace(titles.get(type));
         log.debug("Title: '{}'", title);
         return title;
     }

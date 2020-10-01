@@ -8,7 +8,7 @@ class TitleServiceSpec extends Specification {
     TitleService titleService
 
     void setup() {
-        titleService = new TitleService(new CustomFormats(title: [
+        titleService = new TitleService(resolver, new CustomFormats(title: [
                 'tilskuddfartoy': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}'
         ]))
     }
