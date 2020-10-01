@@ -11,7 +11,7 @@ class BeansPropertiesSpec extends Specification {
         given:
         def mapper = new ObjectMapper()
         def object = mapper.readValue(getClass().getResourceAsStream('/tilskuddfartoy.json'), TilskuddFartoyResource)
-        def subst = new StringSubstitutor(new BeanPropertyLookup(resolver, object))
+        def subst = new StringSubstitutor(new BeanPropertyLookup(Mock(LinkResolver), object))
 
         when:
         def fartoyNavn = subst.replace('${fartoyNavn}')
