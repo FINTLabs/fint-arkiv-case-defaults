@@ -9,7 +9,7 @@ class TitleServiceSpec extends Specification {
 
     void setup() {
         titleService = new TitleService(new CustomFormats(title: [
-                'tilskuddfartoy': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}'
+                'tilskuddfartoy': '${kallesignal} - ${fartoyNavn} - Tilskudd ${date:yyyy} - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}'
         ]))
     }
 
@@ -27,12 +27,12 @@ class TitleServiceSpec extends Specification {
         println(t)
 
         then:
-        t == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
+        t =~ ~/XXYYZ - Hestmann - Tilskudd \d\d\d\d - 22334455-1 - 12345/
     }
 
     def "Set values from title"() {
         given:
-        def t = 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
+        def t = 'XXYYZ - Hestmann - Tilskudd 2020 - 22334455-1 - 12345'
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
@@ -59,7 +59,7 @@ class TitleServiceSpec extends Specification {
 
     def 'Valid title format'() {
         given:
-        def t = 'LDQT - Gamle Lofotferga - Tilskudd - 139136-1 - 14812'
+        def t = 'LDQT - Gamle Lofotferga - Tilskudd 2020 - 139136-1 - 14812'
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:

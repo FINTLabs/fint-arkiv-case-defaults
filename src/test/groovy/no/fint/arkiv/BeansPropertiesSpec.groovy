@@ -5,6 +5,8 @@ import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource
 import org.apache.commons.text.StringSubstitutor
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 class BeansPropertiesSpec extends Specification {
 
     def "Try fetching some properties"() {
@@ -30,5 +32,16 @@ class BeansPropertiesSpec extends Specification {
 
         then:
         tittel == 'Tomt arkivskap'
+    }
+
+    def 'Able to resolve dates'() {
+        given:
+        def subst = new StringSubstitutor(new BeanPropertyLookup(new Object()))
+
+        when:
+        def title = subst.replace('${date:yyyy}')
+
+        then:
+        title == LocalDate.now().year.toString()
     }
 }
