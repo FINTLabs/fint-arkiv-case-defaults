@@ -1,13 +1,14 @@
 package no.fint.arkiv
 
-import no.fint.model.administrasjon.arkiv.DokumentStatus
-import no.fint.model.administrasjon.arkiv.JournalStatus
-import no.fint.model.administrasjon.arkiv.Saksstatus
-import no.fint.model.administrasjon.arkiv.TilknyttetRegistreringSom
+
+import no.fint.model.arkiv.kodeverk.DokumentStatus
+import no.fint.model.arkiv.kodeverk.JournalStatus
+import no.fint.model.arkiv.kodeverk.Saksstatus
+import no.fint.model.arkiv.kodeverk.TilknyttetRegistreringSom
 import no.fint.model.resource.Link
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource
-import no.fint.model.resource.administrasjon.arkiv.SakResource
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.fint.model.resource.arkiv.noark.JournalpostResource
+import no.fint.model.resource.arkiv.noark.SakResource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles

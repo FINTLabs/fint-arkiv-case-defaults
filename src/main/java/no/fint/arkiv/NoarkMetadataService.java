@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import no.fint.model.felles.basisklasser.Begrep;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
-import no.fint.model.resource.administrasjon.arkiv.*;
+import no.fint.model.resource.arkiv.kodeverk.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,11 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.administrasjon.arkiv.*;
+import no.fint.model.arkiv.kodeverk.*;
+import no.fint.model.arkiv.noark.AdministrativEnhet;
+import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
