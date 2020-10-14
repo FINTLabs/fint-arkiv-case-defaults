@@ -54,7 +54,7 @@ public class NoarkMetadataService {
     }
 
     public Stream<DokumentTypeResource> getDokumentType() {
-        return getEntries("dokumenttype")
+        return getEntries("dokumentType")
                 .map(create(DokumentTypeResource::new));
     }
 
@@ -74,7 +74,7 @@ public class NoarkMetadataService {
     }
 
     public Stream<VariantformatResource> getVariantformat() {
-        return getEntries("variantformat")
+        return getEntries("variantFormat")
                 .map(create(VariantformatResource::new));
     }
 

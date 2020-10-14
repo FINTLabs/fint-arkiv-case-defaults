@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public abstract class CaseDefaultsService {
 
     @Autowired
-    private CodingSystemService codingSystemService;
+    protected CodingSystemService codingSystemService;
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -53,6 +53,9 @@ public abstract class CaseDefaultsService {
 
     public void applyDefaultsForUpdate(CaseProperties properties, SaksmappeResource resource) {
         codingSystemService.mapCodingSystemLinks(resource);
+        if (resource.getPart() != null) {
+            resource.getPart().forEach(codingSystemService::mapCodingSystemLinks);
+        }
         if (properties == null) {
             return;
         }
@@ -62,6 +65,7 @@ public abstract class CaseDefaultsService {
         resource.getJournalpost().forEach(journalpost -> {
             codingSystemService.mapCodingSystemLinks(journalpost);
             journalpost.getKorrespondansepart().forEach(korrespondanse -> {
+                codingSystemService.mapCodingSystemLinks(korrespondanse);
                 if (isNotBlank(properties.getKorrespondansepartType()) && korrespondanse.getKorrespondanseparttype().isEmpty()) {
                     korrespondanse.addKorrespondanseparttype(Link.with(
                             KorrespondansepartType.class,
@@ -71,6 +75,9 @@ public abstract class CaseDefaultsService {
             });
             journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> {
                 codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
+                if (dokumentbeskrivelse.getDokumentobjekt() != null) {
+                    dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
+                }
                 if (isNotBlank(properties.getDokumentstatus()) && dokumentbeskrivelse.getDokumentstatus().isEmpty()) {
                     dokumentbeskrivelse.addDokumentstatus(Link.with(
                             DokumentStatus.class,

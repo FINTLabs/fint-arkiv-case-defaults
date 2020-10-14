@@ -50,7 +50,7 @@
   },
   {
     "kode": "M083",
-    "navn": "dokumenttype",
+    "navn": "dokumentType",
     "obligatorisk": false,
     "verdier": {
       "B": "Brev",
@@ -151,7 +151,7 @@
   },
   {
     "kode": "M700",
-    "navn": "variantformat",
+    "navn": "variantFormat",
     "obligatorisk": true,
     "verdier": {
       "P": "Produksjonsformat",
