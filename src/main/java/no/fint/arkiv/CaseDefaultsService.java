@@ -60,10 +60,10 @@ public abstract class CaseDefaultsService {
             resource.setKlasse(
                     IntStream.range(0, properties.getKlasse().length)
                             .mapToObj(i -> {
-                                String klassifikasjon = properties.getKlassifikasjon()[Math.min(properties.getKlassifikasjon().length, i)];
+                                String klassifikasjon = properties.getKlassifikasjon()[Math.min(properties.getKlassifikasjon().length - 1, i)];
                                 String klasse = properties.getKlasse()[i];
                                 KlasseResource result = new KlasseResource();
-                                result.setRekkefolge(i+1);
+                                result.setRekkefolge(i + 1);
                                 result.setKlasseId(klasse);
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
