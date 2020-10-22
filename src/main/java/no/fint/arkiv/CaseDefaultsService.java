@@ -8,6 +8,7 @@ import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
+import no.fint.model.resource.arkiv.noark.SkjermingResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
@@ -69,6 +71,13 @@ public abstract class CaseDefaultsService {
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             }).collect(Collectors.toList()));
+        }
+        if (isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+                && resource.getSkjerming() == null) {
+            SkjermingResource skjerming = new SkjermingResource();
+            skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
+            skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
+            resource.setSkjerming(skjerming);
         }
         applyDefaultsForUpdate(properties, resource);
     }

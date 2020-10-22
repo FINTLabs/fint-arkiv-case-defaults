@@ -25,6 +25,8 @@ applied by the adapter if these values have not been set by the client.
 - `dokumentstatus`
 - `dokumentType`
 - `tilknyttetRegistreringSom`
+- `tilgangsrestriksjon`
+- `skjermingshjemmel`
 
 ### How to implement in adapter
 

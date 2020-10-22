@@ -18,5 +18,6 @@ public class CaseProperties {
     private String dokumentType;
     private String tilknyttetRegistreringSom;
     private String tilgangsrestriksjon;
+    private String skjermingshjemmel;
     private String saksmappeType;
 }
