@@ -6,9 +6,7 @@ import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.KlasseResource;
-import no.fint.model.resource.arkiv.noark.SaksmappeResource;
-import no.fint.model.resource.arkiv.noark.SkjermingResource;
+import no.fint.model.resource.arkiv.noark.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -93,85 +91,94 @@ public abstract class CaseDefaultsService {
         if (isEmpty(resource.getJournalpost())) {
             return;
         }
-        resource.getJournalpost().forEach(journalpost -> {
-            codingSystemService.mapCodingSystemLinks(journalpost);
-            journalpost.getKorrespondansepart().forEach(korrespondanse -> {
-                codingSystemService.mapCodingSystemLinks(korrespondanse);
-                if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
-                    korrespondanse.addKorrespondanseparttype(Link.with(
-                            KorrespondansepartType.class,
-                            "systemid",
-                            properties.getKorrespondansepartType()));
-                }
-            });
-            journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> {
-                codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
-                if (dokumentbeskrivelse.getDokumentobjekt() != null) {
-                    dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
-                }
-                if (isNotBlank(properties.getDokumentstatus()) && isEmpty(dokumentbeskrivelse.getDokumentstatus())) {
-                    dokumentbeskrivelse.addDokumentstatus(Link.with(
-                            DokumentStatus.class,
-                            "systemid",
-                            properties.getDokumentstatus()
-                    ));
-                }
-                if (isNotBlank(properties.getDokumentType()) && isEmpty(dokumentbeskrivelse.getDokumentType())) {
-                    dokumentbeskrivelse.addDokumentType(Link.with(
-                            DokumentType.class,
-                            "systemid",
-                            properties.getDokumentType()
-                    ));
-                }
-                if (isNotBlank(properties.getTilknyttetRegistreringSom()) && isEmpty(dokumentbeskrivelse.getTilknyttetRegistreringSom())) {
-                    dokumentbeskrivelse.addTilknyttetRegistreringSom(Link.with(
-                            TilknyttetRegistreringSom.class,
-                            "systemid",
-                            properties.getTilknyttetRegistreringSom()
-                    ));
-                }
-            });
-            if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
-                journalpost.addJournalposttype(Link.with(
-                        JournalpostType.class,
-                        "systemid",
-                        properties.getJournalpostType()));
-            }
-            if (isNotBlank(properties.getJournalstatus()) && isEmpty(journalpost.getJournalstatus())) {
-                journalpost.addJournalstatus(Link.with(
-                        JournalStatus.class,
-                        "systemid",
-                        properties.getJournalstatus()));
-            }
-            if (isNotBlank(properties.getJournalenhet()) && isEmpty(journalpost.getJournalenhet())) {
-                journalpost.addJournalenhet(Link.with(
-                        AdministrativEnhet.class,
-                        "systemid",
-                        properties.getJournalenhet()
-                ));
-            }
-            if (isNotBlank(properties.getAdministrativEnhet()) && isEmpty(journalpost.getAdministrativEnhet())) {
-                journalpost.addAdministrativEnhet(Link.with(
-                        AdministrativEnhet.class,
-                        "systemid",
-                        properties.getAdministrativEnhet()
-                ));
-            }
-            if (isNotBlank(properties.getArkivdel()) && isEmpty(journalpost.getArkivdel())) {
-                journalpost.addArkivdel(Link.with(
-                        Arkivdel.class,
-                        "systemid",
-                        properties.getArkivdel()
-                ));
-            }
-        });
+        resource.getJournalpost().forEach(journalpost -> applyDefaultsForJournalpost(properties, journalpost));
     }
 
-    private static boolean isEmpty(List<?> list) {
+    protected void applyDefaultsForJournalpost(CaseProperties properties, JournalpostResource journalpost) {
+        codingSystemService.mapCodingSystemLinks(journalpost);
+        journalpost.getKorrespondansepart().forEach(korrespondanse -> {
+            codingSystemService.mapCodingSystemLinks(korrespondanse);
+            if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
+                korrespondanse.addKorrespondanseparttype(Link.with(
+                        KorrespondansepartType.class,
+                        "systemid",
+                        properties.getKorrespondansepartType()));
+            }
+        });
+        journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
+        if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
+            journalpost.addJournalposttype(Link.with(
+                    JournalpostType.class,
+                    "systemid",
+                    properties.getJournalpostType()));
+        }
+        if (isNotBlank(properties.getJournalstatus()) && isEmpty(journalpost.getJournalstatus())) {
+            journalpost.addJournalstatus(Link.with(
+                    JournalStatus.class,
+                    "systemid",
+                    properties.getJournalstatus()));
+        }
+        if (isNotBlank(properties.getJournalenhet()) && isEmpty(journalpost.getJournalenhet())) {
+            journalpost.addJournalenhet(Link.with(
+                    AdministrativEnhet.class,
+                    "systemid",
+                    properties.getJournalenhet()
+            ));
+        }
+
+        applyDefaultsForRegistrering(properties, journalpost);
+    }
+
+    protected void applyDefaultsForRegistrering(CaseProperties properties, no.fint.model.resource.arkiv.noark.RegistreringResource registrering) {
+        if (isNotBlank(properties.getAdministrativEnhet()) && isEmpty(registrering.getAdministrativEnhet())) {
+            registrering.addAdministrativEnhet(Link.with(
+                    AdministrativEnhet.class,
+                    "systemid",
+                    properties.getAdministrativEnhet()
+            ));
+        }
+        if (isNotBlank(properties.getArkivdel()) && isEmpty(registrering.getArkivdel())) {
+            registrering.addArkivdel(Link.with(
+                    Arkivdel.class,
+                    "systemid",
+                    properties.getArkivdel()
+            ));
+        }
+    }
+
+    protected void applyDefaultsForDokument(CaseProperties properties, DokumentbeskrivelseResource dokumentbeskrivelse) {
+        codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
+        if (dokumentbeskrivelse.getDokumentobjekt() != null) {
+            dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
+        }
+        if (isNotBlank(properties.getDokumentstatus()) && isEmpty(dokumentbeskrivelse.getDokumentstatus())) {
+            dokumentbeskrivelse.addDokumentstatus(Link.with(
+                    DokumentStatus.class,
+                    "systemid",
+                    properties.getDokumentstatus()
+            ));
+        }
+        if (isNotBlank(properties.getDokumentType()) && isEmpty(dokumentbeskrivelse.getDokumentType())) {
+            dokumentbeskrivelse.addDokumentType(Link.with(
+                    DokumentType.class,
+                    "systemid",
+                    properties.getDokumentType()
+            ));
+        }
+        if (isNotBlank(properties.getTilknyttetRegistreringSom()) && isEmpty(dokumentbeskrivelse.getTilknyttetRegistreringSom())) {
+            dokumentbeskrivelse.addTilknyttetRegistreringSom(Link.with(
+                    TilknyttetRegistreringSom.class,
+                    "systemid",
+                    properties.getTilknyttetRegistreringSom()
+            ));
+        }
+    }
+
+    protected static boolean isEmpty(List<?> list) {
         return Objects.isNull(list) || list.isEmpty();
     }
 
-    private static <T> boolean isEmpty(T[] array) {
+    protected static <T> boolean isEmpty(T[] array) {
         return Objects.isNull(array) || array.length == 0;
     }
 
