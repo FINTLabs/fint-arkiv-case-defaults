@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
 public class CaseDefaults {
     private CaseProperties
             tilskuddfartoy,
-            tilskuddfredahusprivateie,
+            tilskuddfredabygningprivateie,
             personalmappe;
 }

@@ -1,7 +1,7 @@
 package no.fint.arkiv
 
 import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import spock.lang.Specification
 
 class TitleServiceSpec extends Specification {
