@@ -71,4 +71,33 @@ class TitleServiceSpec extends Specification {
         r.kallesignal == 'LDQT'
         r.soknadsnummer.identifikatorverdi == '14812'
     }
+
+    def "No format defined returns null unless fatal"() {
+        given:
+        def service = new TitleService(new CustomFormats(
+                fatal: false,
+                title: [:]
+        ))
+
+        when:
+        def title = service.getTitle(new TilskuddFartoyResource())
+
+        then:
+        noExceptionThrown()
+        title == null
+    }
+
+    def 'No format defined throws exception if fatal'() {
+        given:
+        def service = new TitleService(new CustomFormats(
+                fatal: true,
+                title: [:]
+        ))
+
+        when:
+        service.getTitle(new TilskuddFartoyResource())
+
+        then:
+        thrown(IllegalArgumentException)
+    }
 }

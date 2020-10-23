@@ -20,15 +20,17 @@ public class TitleService {
 
     private final LinkResolver resolver;
     private final Map<String,String> titles;
+    private final boolean fatal;
 
     public TitleService(LinkResolver resolver, CustomFormats formats) {
         this.resolver = resolver;
         this.titles = formats.getTitle();
+        fatal = formats.isFatal();
     }
 
     public <T> String getTitle(T object) {
         String type = resourceName(object);
-        if (!titles.containsKey(type)) {
+        if (fatal && !titles.containsKey(type)) {
             throw new IllegalArgumentException("No format defined for " + type);
         }
         String title = new StringSubstitutor(new BeanPropertyLookup<>(resolver, object)).replace(titles.get(type));
