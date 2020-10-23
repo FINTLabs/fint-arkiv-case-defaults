@@ -1,7 +1,7 @@
 package no.fint.arkiv
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import org.apache.commons.text.StringSubstitutor
 import spock.lang.Specification
 
@@ -30,5 +30,11 @@ class BeansPropertiesSpec extends Specification {
 
         then:
         tittel == 'Tomt arkivskap'
+
+        when:
+        tittel = subst.replace('${beskrivelse}')
+
+        then:
+        tittel == ''
     }
 }

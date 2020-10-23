@@ -2,14 +2,11 @@ package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.Link;
-import org.apache.commons.beanutils.BeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.lookup.StringLookup;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -46,7 +43,11 @@ public class BeanPropertyLookup<T> implements StringLookup {
                 throw new IllegalArgumentException(linkProperty + " does not resolve to a Link");
             }
         }
-        return String.valueOf(PropertyUtils.getProperty(target, key));
+        final Object value = PropertyUtils.getProperty(target, key);
+        if (value == null) {
+            return "";
+        }
+        return value.toString();
     }
 
 }
