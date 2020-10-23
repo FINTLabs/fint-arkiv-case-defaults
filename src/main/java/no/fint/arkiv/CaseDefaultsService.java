@@ -9,6 +9,7 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -70,13 +71,16 @@ public abstract class CaseDefaultsService {
                                 return result;
                             }).collect(Collectors.toList()));
         }
-        if (isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+
+        if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.SAK)
+                && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
                 && resource.getSkjerming() == null) {
             SkjermingResource skjerming = new SkjermingResource();
             skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
             skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
             resource.setSkjerming(skjerming);
         }
+
         applyDefaultsForUpdate(properties, resource);
     }
 
@@ -129,7 +133,7 @@ public abstract class CaseDefaultsService {
         applyDefaultsForRegistrering(properties, journalpost);
     }
 
-    protected void applyDefaultsForRegistrering(CaseProperties properties, no.fint.model.resource.arkiv.noark.RegistreringResource registrering) {
+    protected void applyDefaultsForRegistrering(CaseProperties properties, RegistreringResource registrering) {
         if (isNotBlank(properties.getAdministrativEnhet()) && isEmpty(registrering.getAdministrativEnhet())) {
             registrering.addAdministrativEnhet(Link.with(
                     AdministrativEnhet.class,
@@ -144,6 +148,16 @@ public abstract class CaseDefaultsService {
                     properties.getArkivdel()
             ));
         }
+
+        if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.JOURNALPOST)
+                && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+                && registrering.getSkjerming() == null) {
+            SkjermingResource skjerming = new SkjermingResource();
+            skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
+            skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
+            registrering.setSkjerming(skjerming);
+        }
+
     }
 
     protected void applyDefaultsForDokument(CaseProperties properties, DokumentbeskrivelseResource dokumentbeskrivelse) {
@@ -172,6 +186,10 @@ public abstract class CaseDefaultsService {
                     properties.getTilknyttetRegistreringSom()
             ));
         }
+    }
+
+    protected static <T> boolean contains(T[] array, T value) {
+        return Objects.nonNull(array) && Arrays.asList(array).contains(value);
     }
 
     protected static boolean isEmpty(List<?> list) {

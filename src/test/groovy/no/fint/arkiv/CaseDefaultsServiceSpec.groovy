@@ -1,31 +1,21 @@
 package no.fint.arkiv
 
-import no.fint.model.arkiv.kodeverk.DokumentStatus
-import no.fint.model.arkiv.kodeverk.DokumentType
-import no.fint.model.arkiv.kodeverk.JournalStatus
-import no.fint.model.arkiv.kodeverk.JournalpostType
-import no.fint.model.arkiv.kodeverk.KorrespondansepartType
-import no.fint.model.arkiv.kodeverk.PartRolle
-import no.fint.model.arkiv.kodeverk.Saksstatus
-import no.fint.model.arkiv.kodeverk.TilknyttetRegistreringSom
-import no.fint.model.arkiv.kodeverk.Variantformat
+import no.fint.model.arkiv.kodeverk.*
 import no.fint.model.resource.Link
-import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
-import no.fint.model.resource.arkiv.noark.DokumentobjektResource
-import no.fint.model.resource.arkiv.noark.JournalpostResource
-import no.fint.model.resource.arkiv.noark.KorrespondansepartResource
-import no.fint.model.resource.arkiv.noark.PartResource
-import no.fint.model.resource.arkiv.noark.SakResource
+import no.fint.model.resource.arkiv.noark.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-@SpringBootTest(classes = [CodingSystemService, CodingSystemDefaults, NoarkMetadataService])
+@SpringBootTest(classes = [CodingSystemService, CodingSystemDefaults, NoarkMetadataService, CaseDefaults])
 @ActiveProfiles(['spock'])
 class CaseDefaultsServiceSpec extends Specification {
     @Autowired
     CodingSystemService codingSystemService
+
+    @Autowired
+    CaseDefaults caseDefaults
 
     def 'Applies both noark defaults and case defaults'() {
         given:
@@ -56,17 +46,23 @@ class CaseDefaultsServiceSpec extends Specification {
         )
         sak.addSaksstatus(Link.with(Saksstatus, 'systemid', 'B'))
 
-        def props = new CaseProperties()
+        def props = new CaseProperties(
+                skjermingskontekst: [CaseProperties.Skjermingskontekst.JOURNALPOST, CaseProperties.Skjermingskontekst.SAK],
+                tilgangsrestriksjon: 'ABC',
+                skjermingshjemmel: 'DEF'
+        )
 
         when:
-
-
         service.applyDefaultsForCreation(props, sak)
 
         then:
         sak.getSaksstatus().every { it.href.endsWith('/997') }
+        sak.skjerming.tilgangsrestriksjon.every { it.href.endsWith('/ABC') }
+        sak.skjerming.skjermingshjemmel.every { it.href.endsWith(('/DEF')) }
         sak.part.every { it.getPartRolle().every { it.href.endsWith('/43') } }
         sak.journalpost.every {
+            it.skjerming.tilgangsrestriksjon.every { it.href.endsWith('/ABC') }
+            it.skjerming.skjermingshjemmel.every { it.href.endsWith(('/DEF')) }
             it.getJournalstatus().every { it.href.endsWith('/42') } &&
                     it.getJournalposttype().every { it.href.endsWith('/110') } &&
                     it.dokumentbeskrivelse.every {
@@ -78,5 +74,25 @@ class CaseDefaultsServiceSpec extends Specification {
                                 }
                     }
         }
+    }
+
+    def "Able to decode skjermingskontekst"() {
+        when:
+        def props = caseDefaults.tilskuddfartoy
+        then:
+        props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.SAK }
+        !props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.JOURNALPOST }
+
+        when:
+        props = caseDefaults.personalmappe
+        then:
+        props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.SAK }
+        props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.JOURNALPOST }
+
+        when:
+        props = caseDefaults.tilskuddfredabygningprivateie
+        then:
+        !props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.SAK }
+        props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.JOURNALPOST }
     }
 }
