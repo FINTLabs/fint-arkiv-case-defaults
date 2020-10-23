@@ -30,7 +30,7 @@ public class BeanPropertyLookup<T> implements StringLookup {
     }
 
     private String getProperty(Object target, String key) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        log.info("Lookup {} on {}", key, target);
+        log.trace("Lookup {} on {}", key, target);
         if (StringUtils.startsWith(key, "link:")) {
             String linkProperty = StringUtils.substringBetween(key, "link:", "#");
             String targetProperty = StringUtils.substringAfter(key, "#");

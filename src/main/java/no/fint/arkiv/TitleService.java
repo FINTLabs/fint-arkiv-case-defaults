@@ -19,13 +19,13 @@ import java.util.regex.Pattern;
 public class TitleService {
 
     private final LinkResolver resolver;
-    private final Map<String,String> titles;
+    private final Map<String, String> titles;
     private final boolean fatal;
 
     public TitleService(LinkResolver resolver, CustomFormats formats) {
         this.resolver = resolver;
         this.titles = formats.getTitle();
-        fatal = formats.isFatal();
+        this.fatal = formats.isFatal();
     }
 
     public <T> String getTitle(T object) {
@@ -43,7 +43,7 @@ public class TitleService {
     }
 
     public void parseTitle(Object object, String title) {
-        if (titles == null){
+        if (titles == null) {
             log.debug("No formats defined!");
             return;
         }
@@ -66,8 +66,8 @@ public class TitleService {
         if (titleMatcher.matches()) {
             for (int i = 1; i <= titleMatcher.groupCount(); ++i) {
                 try {
-                    log.debug("Setting property {} to {}", nameList.get(i-1), titleMatcher.group(i));
-                    BeanUtils.setProperty(object, nameList.get(i-1), titleMatcher.group(i));
+                    log.debug("Setting property {} to {}", nameList.get(i - 1), titleMatcher.group(i));
+                    BeanUtils.setProperty(object, nameList.get(i - 1), titleMatcher.group(i));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
