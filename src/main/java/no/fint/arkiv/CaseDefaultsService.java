@@ -148,6 +148,13 @@ public abstract class CaseDefaultsService {
                     properties.getArkivdel()
             ));
         }
+        if (isNotBlank(properties.getAdministrativEnhet()) && isEmpty(registrering.getAdministrativEnhet())) {
+            registrering.addAdministrativEnhet(Link.with(
+                    AdministrativEnhet.class,
+                    "systemid",
+                    properties.getAdministrativEnhet()
+            ));
+        }
 
         if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.JOURNALPOST)
                 && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
