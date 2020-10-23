@@ -30,5 +30,11 @@ class BeansPropertiesSpec extends Specification {
 
         then:
         tittel == 'Tomt arkivskap'
+
+        when:
+        tittel = subst.replace('${beskrivelse}')
+
+        then:
+        tittel == ''
     }
 }
