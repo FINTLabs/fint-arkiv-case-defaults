@@ -74,10 +74,11 @@ class TitleServiceSpec extends Specification {
 
     def "No format defined returns null unless fatal"() {
         given:
-        def service = new TitleService(new CustomFormats(
-                fatal: false,
-                title: [:]
-        ))
+        def service = new TitleService(Mock(LinkResolver),
+                new CustomFormats(
+                        fatal: false,
+                        title: [:]
+                ))
 
         when:
         def title = service.getTitle(new TilskuddFartoyResource())
@@ -89,10 +90,11 @@ class TitleServiceSpec extends Specification {
 
     def 'No format defined throws exception if fatal'() {
         given:
-        def service = new TitleService(new CustomFormats(
-                fatal: true,
-                title: [:]
-        ))
+        def service = new TitleService(Mock(LinkResolver),
+                new CustomFormats(
+                        fatal: true,
+                        title: [:]
+                ))
 
         when:
         service.getTitle(new TilskuddFartoyResource())
