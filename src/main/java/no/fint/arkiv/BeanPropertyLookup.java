@@ -16,7 +16,11 @@ public class BeanPropertyLookup<T> implements StringLookup {
     @Override
     public String lookup(String key) {
         try {
-            return String.valueOf(PropertyUtils.getProperty(bean, key));
+            final Object value = PropertyUtils.getProperty(bean, key);
+            if (value == null) {
+                return "";
+            }
+            return value.toString();
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
