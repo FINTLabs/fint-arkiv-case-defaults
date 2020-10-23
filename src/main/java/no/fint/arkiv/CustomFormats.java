@@ -12,6 +12,7 @@ import java.util.Map;
 @EnableConfigurationProperties
 @ConfigurationProperties("fint.case.formats")
 public class CustomFormats {
+    private boolean fatal = true;
     private Map<String, String> title;
     private Map<String, Map<String, String>> field;
 }
