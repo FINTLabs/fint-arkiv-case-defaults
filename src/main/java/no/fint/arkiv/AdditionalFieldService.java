@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,7 @@ public class AdditionalFieldService {
         fields
                 .stream()
                 .filter(f -> fieldMap.containsKey(f.getName()))
+                .filter(f -> StringUtils.isNotBlank(f.getValue()))
                 .forEach(f -> {
                     final String format = fieldMap.get(f.getName());
                     log.trace("Parsing field {} -> {} -> {}", f.getName(), f.getValue(), format);
@@ -68,8 +70,8 @@ public class AdditionalFieldService {
                     if (fieldMatcher.matches()) {
                         for (int i = 1; i <= fieldMatcher.groupCount(); i++) {
                             try {
-                                log.debug("Setting attribute {} to {}", nameList.get(i-1), fieldMatcher.group(i));
-                                BeanUtils.setProperty(resource, nameList.get(i-1), fieldMatcher.group(i));
+                                log.debug("Setting attribute {} to {}", nameList.get(i - 1), fieldMatcher.group(i));
+                                BeanUtils.setProperty(resource, nameList.get(i - 1), fieldMatcher.group(i));
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }
