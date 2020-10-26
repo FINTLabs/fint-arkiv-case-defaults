@@ -13,5 +13,6 @@ public class CaseDefaults {
     private CaseProperties
             tilskuddfartoy,
             tilskuddfredabygningprivateie,
-            personalmappe;
+            personalmappe,
+            drosjeloyve;
 }
