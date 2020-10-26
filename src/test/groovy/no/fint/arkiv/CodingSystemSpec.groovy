@@ -1,11 +1,6 @@
 package no.fint.arkiv
 
-
-import no.fint.model.arkiv.kodeverk.DokumentStatus
-import no.fint.model.arkiv.kodeverk.JournalStatus
-import no.fint.model.arkiv.kodeverk.KorrespondansepartType
-import no.fint.model.arkiv.kodeverk.Saksstatus
-import no.fint.model.arkiv.kodeverk.TilknyttetRegistreringSom
+import no.fint.model.arkiv.kodeverk.*
 import no.fint.model.resource.Link
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
 import no.fint.model.resource.arkiv.noark.JournalpostResource
@@ -40,6 +35,8 @@ class CodingSystemSpec extends Specification {
         noarkMetadataService.tilknyttetRegistreringSom.anyMatch {it.navn == 'Hoveddokument'}
         noarkMetadataService.partRolle.anyMatch {it.navn == 'Klient'}
         noarkMetadataService.variantformat.anyMatch {it.navn == 'Arkivformat'}
+        noarkMetadataService.tilgangsrestriksjon.anyMatch { it.navn == 'Unntatt etter offentleglova'}
+        noarkMetadataService.skjermingshjemmel.allMatch { it.navn.contains('§')}
     }
 
     def "Able to get definition of metadata M082"() {

@@ -78,6 +78,16 @@ public class NoarkMetadataService {
                 .map(create(VariantformatResource::new));
     }
 
+    public Stream<TilgangsrestriksjonResource> getTilgangsrestriksjon() {
+        return getEntries("tilgangsrestriksjon")
+                .map(create(TilgangsrestriksjonResource::new));
+    }
+
+    public Stream<SkjermingshjemmelResource> getSkjermingshjemmel() {
+        return getEntries("skjermingshjemmel")
+                .map(create(SkjermingshjemmelResource::new));
+    }
+
     private Stream<Map.Entry<String, String>> getEntries(String name) {
         return metadata.get(name).getVerdier().entrySet().stream();
     }
