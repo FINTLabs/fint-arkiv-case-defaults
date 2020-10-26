@@ -193,6 +193,16 @@ public abstract class CaseDefaultsService {
                     properties.getTilknyttetRegistreringSom()
             ));
         }
+
+        if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.DOKUMENT)
+                && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+                && dokumentbeskrivelse.getSkjerming() == null) {
+            SkjermingResource skjerming = new SkjermingResource();
+            skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
+            skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
+            dokumentbeskrivelse.setSkjerming(skjerming);
+        }
+
     }
 
     protected static <T> boolean contains(T[] array, T value) {

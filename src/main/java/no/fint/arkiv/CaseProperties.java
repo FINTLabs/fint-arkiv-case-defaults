@@ -22,5 +22,5 @@ public class CaseProperties {
     private String skjermingshjemmel;
     private String saksmappeType;
 
-    public enum Skjermingskontekst { SAK, JOURNALPOST }
+    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
 }
