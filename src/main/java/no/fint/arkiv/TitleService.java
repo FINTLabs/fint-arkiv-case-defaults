@@ -40,15 +40,15 @@ public class TitleService {
         return StringUtils.removeEnd(StringUtils.lowerCase(object.getClass().getSimpleName()), "resource");
     }
 
-    public void parseTitle(Object object, String title) {
+    public boolean parseTitle(Object object, String title) {
         if (titles == null){
             log.debug("No formats defined!");
-            return;
+            return !fatal;
         }
         String format = titles.get(resourceName(object));
         if (StringUtils.isBlank(format)) {
             log.debug("No format defined for {}", resourceName(object));
-            return;
+            return !fatal;
         }
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
         Matcher nameMatcher = names.matcher(format);
@@ -70,6 +70,8 @@ public class TitleService {
                     e.printStackTrace();
                 }
             }
+            return true;
         }
+        return false;
     }
 }
