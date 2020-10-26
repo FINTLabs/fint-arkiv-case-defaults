@@ -63,10 +63,11 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleService.parseTitle(r, t)
+        def result = titleService.parseTitle(r, t)
         println(r)
 
         then:
+        result
         r.fartoyNavn == 'Gamle Lofotferga'
         r.kallesignal == 'LDQT'
         r.soknadsnummer.identifikatorverdi == '14812'
@@ -99,5 +100,29 @@ class TitleServiceSpec extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    def 'Return false if title does not match pattern'() {
+        given:
+        def t = 'Tilskudd fartøy: LDQT - Gamle Lofotferga - 139136-1 - 14812'
+        def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+
+        when:
+        def result = titleService.parseTitle(r, t)
+
+        then:
+        !result
+    }
+
+    def 'Return true if title matches pattern'() {
+        given:
+        def t = 'LDQT - Gamle Lofotferga - Tilskudd - 139136-1 - 14812'
+        def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+
+        when:
+        def result = titleService.parseTitle(r, t)
+
+        then:
+        result
     }
 }
