@@ -43,12 +43,12 @@ public class TitleService {
     public boolean parseTitle(Object object, String title) {
         if (titles == null){
             log.debug("No formats defined!");
-            return false;
+            return !fatal;
         }
         String format = titles.get(resourceName(object));
         if (StringUtils.isBlank(format)) {
             log.debug("No format defined for {}", resourceName(object));
-            return false;
+            return !fatal;
         }
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
         Matcher nameMatcher = names.matcher(format);

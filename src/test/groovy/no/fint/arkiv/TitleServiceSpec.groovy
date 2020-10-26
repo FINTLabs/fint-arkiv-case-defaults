@@ -88,6 +88,20 @@ class TitleServiceSpec extends Specification {
         title == null
     }
 
+    def "Parsing when no format defined returns true unless fatal"() {
+        given:
+        def service = new TitleService(new CustomFormats(
+                fatal: false,
+                title: [:]
+        ))
+
+        when:
+        def result = service.parseTitle(new TilskuddFartoyResource(), 'Hello there')
+
+        then:
+        result
+    }
+
     def 'No format defined throws exception if fatal'() {
         given:
         def service = new TitleService(new CustomFormats(
@@ -100,6 +114,20 @@ class TitleServiceSpec extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    def 'Parsing when no format defined returns false if fatal'() {
+        given:
+        def service = new TitleService(new CustomFormats(
+                fatal: true,
+                title: [:]
+        ))
+
+        when:
+        def result = service.parseTitle(new TilskuddFartoyResource(), 'Hello there')
+
+        then:
+        !result
     }
 
     def 'Return false if title does not match pattern'() {
