@@ -11,10 +11,10 @@ import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -60,12 +60,12 @@ public abstract class CaseDefaultsService {
         if (!isEmpty(properties.getKlassifikasjon()) && isEmpty(resource.getKlasse())) {
             final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resource));
             resource.setKlasse(
-                    IntStream.range(0, properties.getKlassifikasjon().size())
-                            .mapToObj(i -> {
-                                CaseProperties.Klassifikasjon it = properties.getKlassifikasjon().get(i);
+                    properties.getKlassifikasjon().entrySet().stream()
+                            .map(entry -> {
+                                CaseProperties.Klassifikasjon it = entry.getValue();
                                 String klassifikasjon = it.getSystem();
                                 KlasseResource result = new KlasseResource();
-                                result.setRekkefolge(i + 1);
+                                result.setRekkefolge(entry.getKey());
                                 result.setKlasseId(substitutor.replace(it.getKlasse()));
                                 result.setTittel(substitutor.replace(it.getTittel()));
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
@@ -210,8 +210,12 @@ public abstract class CaseDefaultsService {
         return Objects.nonNull(array) && Arrays.asList(array).contains(value);
     }
 
-    protected static boolean isEmpty(List<?> list) {
-        return Objects.isNull(list) || list.isEmpty();
+    protected static boolean isEmpty(Collection<?> collection) {
+        return Objects.isNull(collection) || collection.isEmpty();
+    }
+
+    protected static boolean isEmpty(Map<?,?> map) {
+        return Objects.isNull(map) || map.isEmpty();
     }
 
     protected static <T> boolean isEmpty(T[] array) {

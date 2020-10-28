@@ -2,8 +2,7 @@ package no.fint.arkiv;
 
 import lombok.Data;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 @Data
 public class CaseProperties {
@@ -11,7 +10,7 @@ public class CaseProperties {
     private String journalenhet;
     private String arkivdel;
     private String[] noekkelord;
-    private List<Klassifikasjon> klassifikasjon = new LinkedList<>();
+    private Map<Integer, Klassifikasjon> klassifikasjon;
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
