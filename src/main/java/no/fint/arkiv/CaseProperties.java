@@ -2,14 +2,16 @@ package no.fint.arkiv;
 
 import lombok.Data;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Data
 public class CaseProperties {
     private String administrativEnhet;
     private String journalenhet;
     private String arkivdel;
     private String[] noekkelord;
-    private String[] klassifikasjon;
-    private String[] klasse;
+    private List<Klassifikasjon> klassifikasjon = new LinkedList<>();
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
@@ -22,5 +24,13 @@ public class CaseProperties {
     private String skjermingshjemmel;
     private String saksmappeType;
 
-    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
+    public enum Skjermingskontekst {SAK, JOURNALPOST, DOKUMENT}
+
+    @Data
+    public static class Klassifikasjon {
+        private String
+                system,
+                klasse,
+                tittel;
+    }
 }

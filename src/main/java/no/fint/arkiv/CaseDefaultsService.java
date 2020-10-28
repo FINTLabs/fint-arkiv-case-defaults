@@ -7,6 +7,7 @@ import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
+import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -56,17 +57,17 @@ public abstract class CaseDefaultsService {
                     properties.getAdministrativEnhet()
             ));
         }
-        if (!isEmpty(properties.getKlassifikasjon()) && !isEmpty(properties.getKlasse())
-                && isEmpty(resource.getKlasse())) {
+        if (!isEmpty(properties.getKlassifikasjon()) && isEmpty(resource.getKlasse())) {
+            final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resource));
             resource.setKlasse(
-                    IntStream.range(0, properties.getKlasse().length)
+                    IntStream.range(0, properties.getKlassifikasjon().size())
                             .mapToObj(i -> {
-                                String klassifikasjon = properties.getKlassifikasjon()[Math.min(properties.getKlassifikasjon().length - 1, i)];
-                                String klasse = properties.getKlasse()[i];
+                                CaseProperties.Klassifikasjon it = properties.getKlassifikasjon().get(i);
+                                String klassifikasjon = it.getSystem();
                                 KlasseResource result = new KlasseResource();
                                 result.setRekkefolge(i + 1);
-                                result.setKlasseId(klasse);
-                                result.setTittel(klasse);
+                                result.setKlasseId(substitutor.replace(it.getKlasse()));
+                                result.setTittel(substitutor.replace(it.getTittel()));
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             }).collect(Collectors.toList()));
