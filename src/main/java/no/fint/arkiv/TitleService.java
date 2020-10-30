@@ -18,12 +18,14 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleService {
 
-    private final Map<String,String> titles;
+    private final LinkResolver resolver;
+    private final Map<String, String> titles;
     private final boolean fatal;
 
-    public TitleService(CustomFormats formats) {
+    public TitleService(LinkResolver resolver, CustomFormats formats) {
+        this.resolver = resolver;
         this.titles = formats.getTitle();
-        fatal = formats.isFatal();
+        this.fatal = formats.isFatal();
     }
 
     public <T> String getTitle(T object) {
@@ -31,7 +33,7 @@ public class TitleService {
         if (fatal && !titles.containsKey(type)) {
             throw new IllegalArgumentException("No format defined for " + type);
         }
-        String title = new StringSubstitutor(new BeanPropertyLookup<>(object)).replace(titles.get(type));
+        String title = new StringSubstitutor(new BeanPropertyLookup<>(resolver, object)).replace(titles.get(type));
         log.debug("Title: '{}'", title);
         return title;
     }
@@ -41,7 +43,7 @@ public class TitleService {
     }
 
     public boolean parseTitle(Object object, String title) {
-        if (titles == null){
+        if (titles == null) {
             log.debug("No formats defined!");
             return !fatal;
         }
@@ -64,8 +66,8 @@ public class TitleService {
         if (titleMatcher.matches()) {
             for (int i = 1; i <= titleMatcher.groupCount(); ++i) {
                 try {
-                    log.debug("Setting property {} to {}", nameList.get(i-1), titleMatcher.group(i));
-                    BeanUtils.setProperty(object, nameList.get(i-1), titleMatcher.group(i));
+                    log.debug("Setting property {} to {}", nameList.get(i - 1), titleMatcher.group(i));
+                    BeanUtils.setProperty(object, nameList.get(i - 1), titleMatcher.group(i));
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }

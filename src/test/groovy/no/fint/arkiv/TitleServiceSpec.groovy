@@ -8,7 +8,7 @@ class TitleServiceSpec extends Specification {
     TitleService titleService
 
     void setup() {
-        titleService = new TitleService(new CustomFormats(title: [
+        titleService = new TitleService(Mock(LinkResolver), new CustomFormats(title: [
                 'tilskuddfartoy': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}'
         ]))
     }
@@ -75,10 +75,11 @@ class TitleServiceSpec extends Specification {
 
     def "No format defined returns null unless fatal"() {
         given:
-        def service = new TitleService(new CustomFormats(
-                fatal: false,
-                title: [:]
-        ))
+        def service = new TitleService(Mock(LinkResolver),
+                new CustomFormats(
+                        fatal: false,
+                        title: [:]
+                ))
 
         when:
         def title = service.getTitle(new TilskuddFartoyResource())
@@ -90,7 +91,7 @@ class TitleServiceSpec extends Specification {
 
     def "Parsing when no format defined returns true unless fatal"() {
         given:
-        def service = new TitleService(new CustomFormats(
+        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
                 fatal: false,
                 title: [:]
         ))
@@ -104,10 +105,11 @@ class TitleServiceSpec extends Specification {
 
     def 'No format defined throws exception if fatal'() {
         given:
-        def service = new TitleService(new CustomFormats(
-                fatal: true,
-                title: [:]
-        ))
+        def service = new TitleService(Mock(LinkResolver),
+                new CustomFormats(
+                        fatal: true,
+                        title: [:]
+                ))
 
         when:
         service.getTitle(new TilskuddFartoyResource())
@@ -118,7 +120,7 @@ class TitleServiceSpec extends Specification {
 
     def 'Parsing when no format defined returns false if fatal'() {
         given:
-        def service = new TitleService(new CustomFormats(
+        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
                 fatal: true,
                 title: [:]
         ))
