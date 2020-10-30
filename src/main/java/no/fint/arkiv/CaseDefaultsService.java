@@ -127,6 +127,14 @@ public abstract class CaseDefaultsService {
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
+            switch (properties.getJournalpostType()) {
+                case "I":
+                    defaultDate(journalpost::getMottattDato, journalpost::setMottattDato);
+                    break;
+                case "U":
+                    defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
+                    break;
+            }
             journalpost.addJournalposttype(Link.with(
                     JournalpostType.class,
                     "systemid",
