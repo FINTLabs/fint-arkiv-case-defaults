@@ -71,6 +71,8 @@ The metadata attributes supported are:
 - `korrespondanseparttype`
 - `tilknyttetRegistreringSom`
 - `partRolle`
+- `tilgangsrestriksjon`
+- `skjermingshjemmel`
 - `skjermingMetadata` (*)
 - `skjermingDokument` (*)
 - `gradering`
