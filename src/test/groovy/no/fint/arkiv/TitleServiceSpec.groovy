@@ -91,7 +91,7 @@ class TitleServiceSpec extends Specification {
 
     def "Parsing when no format defined returns true unless fatal"() {
         given:
-        def service = new TitleService(new CustomFormats(
+        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
                 fatal: false,
                 title: [:]
         ))
@@ -120,7 +120,7 @@ class TitleServiceSpec extends Specification {
 
     def 'Parsing when no format defined returns false if fatal'() {
         given:
-        def service = new TitleService(new CustomFormats(
+        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
                 fatal: true,
                 title: [:]
         ))
