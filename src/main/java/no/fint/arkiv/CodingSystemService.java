@@ -62,6 +62,7 @@ public class CodingSystemService {
                 .getLinks()
                 .entrySet()
                 .stream()
+                .peek(s -> log.debug("Checking {} ... : {}", s.getKey(), noarkMetadataService.getMetadata().get(s.getKey())))
                 .filter(it -> noarkMetadataService.getMetadata().containsKey(it.getKey()))
                 .forEach(this::updateEntry);
     }

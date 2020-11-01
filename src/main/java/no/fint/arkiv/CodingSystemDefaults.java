@@ -18,7 +18,7 @@ public class CodingSystemDefaults {
             journalstatus,
             dokumentstatus,
             journalposttype,
-            dokumenttype,
+            dokumentType,
             klassifikasjonstype,
             korrespondanseparttype,
             tilknyttetRegistreringSom,
@@ -26,6 +26,6 @@ public class CodingSystemDefaults {
             skjermingMetadata,
             skjermingDokument,
             gradering,
-            variantformat;
+            variantFormat;
 
 }

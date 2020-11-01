@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class AdditionalFieldService {
+    private final LinkResolver resolver;
     private final Map<String, Map<String, String>> fieldFormats;
 
-    public AdditionalFieldService(CustomFormats customFormats) {
+    public AdditionalFieldService(LinkResolver resolver, CustomFormats customFormats) {
+        this.resolver = resolver;
         this.fieldFormats = customFormats.getField();
     }
 
@@ -40,7 +43,7 @@ public class AdditionalFieldService {
             log.warn("No custom fields for {}", type);
             return Stream.empty();
         }
-        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resource));
+        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resolver, resource));
         return fields.entrySet().stream()
                 .map(e -> new Field(e.getKey(),
                         substitutor.replace(e.getValue())));
@@ -60,6 +63,7 @@ public class AdditionalFieldService {
         fields
                 .stream()
                 .filter(f -> fieldMap.containsKey(f.getName()))
+                .filter(f -> StringUtils.isNotBlank(f.getValue()))
                 .forEach(f -> {
                     final String format = fieldMap.get(f.getName());
                     log.trace("Parsing field {} -> {} -> {}", f.getName(), f.getValue(), format);
@@ -68,8 +72,8 @@ public class AdditionalFieldService {
                     if (fieldMatcher.matches()) {
                         for (int i = 1; i <= fieldMatcher.groupCount(); i++) {
                             try {
-                                log.debug("Setting attribute {} to {}", nameList.get(i-1), fieldMatcher.group(i));
-                                BeanUtils.setProperty(resource, nameList.get(i-1), fieldMatcher.group(i));
+                                log.debug("Setting attribute {} to {}", nameList.get(i - 1), fieldMatcher.group(i));
+                                BeanUtils.setProperty(resource, nameList.get(i - 1), fieldMatcher.group(i));
                             } catch (IllegalAccessException | InvocationTargetException e) {
                                 e.printStackTrace();
                             }

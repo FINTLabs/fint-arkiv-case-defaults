@@ -50,7 +50,7 @@
   },
   {
     "kode": "M083",
-    "navn": "dokumenttype",
+    "navn": "dokumentType",
     "obligatorisk": false,
     "verdier": {
       "B": "Brev",
@@ -109,6 +109,50 @@
     }
   },
   {
+    "kode": "M500",
+    "navn": "tilgangsrestriksjon",
+    "obligatorisk": true,
+    "verdier": {
+      "B": "Begrenset etter sikkerhetsinstruksen",
+      "K": "Konfidensielt etter sikkerhetsinstruksen",
+      "H": "Hemmelig etter sikkerhetsinstruksen",
+      "F": "Fortrolig etter beskyttelsesinstruksen",
+      "SF": "Strengt fortrolig etter beskyttelsesinstruksen",
+      "UO": "Unntatt etter offentleglova",
+      "XX": "Midlertidig sperret",
+      "P": "Personalsaker",
+      "KL": "Klientsaker"
+    }
+  },
+  {
+    "kode": "M501",
+    "navn": "skjermingshjemmel",
+    "obligatorisk": true,
+    "verdier": {
+      "offl.5": "Offentleglova § 5",
+      "offl.5a": "Offentleglova § 5a",
+      "offl.6": "Offentleglova § 6",
+      "offl.11": "Offentleglova § 11",
+      "offl.13.fvl.13": "Offentleglova § 13 jfr. forvaltningsloven § 13, første ledd",
+      "offl.14": "Offentleglova § 14",
+      "offl.15": "Offentleglova § 15",
+      "offl.16": "Offentleglova § 16",
+      "offl.17": "Offentleglova § 17",
+      "offl.18": "Offentleglova § 18",
+      "offl.19": "Offentleglova § 19",
+      "offl.20": "Offentleglova § 20",
+      "offl.21": "Offentleglova § 21",
+      "offl.23": "Offentleglova § 23",
+      "offl.24": "Offentleglova § 24",
+      "offl.25": "Offentleglova § 25",
+      "offl.26.1": "Offentleglova § 26, første ledd",
+      "offl.26.2": "Offentleglova § 26, andre ledd",
+      "offl.26.3": "Offentleglova § 26, tredje ledd",
+      "offl.26.4": "Offentleglova § 26, fjerde ledd",
+      "offl.26.5": "Offentleglova § 26, femte ledd"
+    }
+  },
+  {
     "kode": "M502",
     "navn": "skjermingMetadata",
     "obligatorisk": true,
@@ -151,7 +195,7 @@
   },
   {
     "kode": "M700",
-    "navn": "variantformat",
+    "navn": "variantFormat",
     "obligatorisk": true,
     "verdier": {
       "P": "Produksjonsformat",

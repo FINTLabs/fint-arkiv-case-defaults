@@ -17,6 +17,10 @@ public class CaseProperties {
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;
+    private Skjermingskontekst[] skjermingskontekst;
     private String tilgangsrestriksjon;
+    private String skjermingshjemmel;
     private String saksmappeType;
+
+    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
 }

@@ -1,13 +1,11 @@
 package no.fint.arkiv
 
-import no.fint.model.administrasjon.arkiv.DokumentStatus
-import no.fint.model.administrasjon.arkiv.JournalStatus
-import no.fint.model.administrasjon.arkiv.Saksstatus
-import no.fint.model.administrasjon.arkiv.TilknyttetRegistreringSom
+import no.fint.model.arkiv.kodeverk.*
 import no.fint.model.resource.Link
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource
-import no.fint.model.resource.administrasjon.arkiv.SakResource
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.fint.model.resource.arkiv.noark.JournalpostResource
+import no.fint.model.resource.arkiv.noark.KorrespondansepartResource
+import no.fint.model.resource.arkiv.noark.SakResource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -37,6 +35,8 @@ class CodingSystemSpec extends Specification {
         noarkMetadataService.tilknyttetRegistreringSom.anyMatch {it.navn == 'Hoveddokument'}
         noarkMetadataService.partRolle.anyMatch {it.navn == 'Klient'}
         noarkMetadataService.variantformat.anyMatch {it.navn == 'Arkivformat'}
+        noarkMetadataService.tilgangsrestriksjon.anyMatch { it.navn == 'Unntatt etter offentleglova'}
+        noarkMetadataService.skjermingshjemmel.allMatch { it.navn.contains('§')}
     }
 
     def "Able to get definition of metadata M082"() {
@@ -48,14 +48,22 @@ class CodingSystemSpec extends Specification {
 
     def 'Able to update Journalpost code value links'() {
         given:
-        def journalpost = new JournalpostResource()
+        def korrespondansepart = new KorrespondansepartResource()
+        def journalpost = new JournalpostResource(
+                korrespondansepart: [
+                        korrespondansepart
+                ]
+        )
 
         when:
-        journalpost.addJournalstatus(Link.with(JournalStatus, 'systemid', 'F'))
+        korrespondansepart.addKorrespondanseparttype(Link.with(KorrespondansepartType, 'systemid', 'EA'))
+        journalpost.addJournalstatus(Link.with(JournalStatus, 'systemid', 'G'))
         codingSystemService.mapCodingSystemLinks(journalpost)
+        codingSystemService.mapCodingSystemLinks(korrespondansepart)
 
         then:
-        journalpost.getJournalstatus().any {it.href.endsWith('/42')}
+        journalpost.getJournalstatus().every {it.href.endsWith('/42')}
+        journalpost.korrespondansepart.every {it.getKorrespondanseparttype().every {it.href.endsWith('/396')}}
     }
 
     def 'Able to update Saksmappe code value links'() {
