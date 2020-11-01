@@ -18,11 +18,13 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class TitleMapper {
+    private final String resourceName;
     private final Title title;
     private final LinkResolver linkResolver;
     private final boolean fatal;
 
-    public TitleMapper(@NotNull Title title, LinkResolver linkResolver, boolean fatal) {
+    public TitleMapper(String resourceName, @NotNull Title title, LinkResolver linkResolver, boolean fatal) {
+        this.resourceName = resourceName;
         this.title = title;
         this.linkResolver = linkResolver;
         this.fatal = fatal;
@@ -30,39 +32,47 @@ public class TitleMapper {
 
     public String getCaseTitle(SaksmappeResource saksmappe) {
         String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, saksmappe)).replace(title.getCases());
-        log.debug("Case title: '{}'", result);
+        log.debug("{} - Case title: '{}'", resourceName, result);
         return result;
     }
 
     public String getRecordTitle(SaksmappeResource saksmappe, RegistreringResource registrering) {
         String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, registrering, saksmappe)).replace(title.getRecords());
-        log.debug("Record title: '{}'", result);
+        log.debug("{} - Record title: '{}'", resourceName, result);
         return result;
     }
 
     public String getDocumentTitle(SaksmappeResource saksmappe, RegistreringResource registering, DokumentbeskrivelseResource dokumentbeskrivelse) {
         String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, dokumentbeskrivelse, registering, saksmappe)).replace(title.getDocuments());
-        log.debug("Document title: '{}'", result);
+        log.debug("{} - Document title: '{}'", resourceName, result);
         return result;
     }
 
     public boolean parseCaseTitle(SaksmappeResource saksmappe, String input) {
+        if (StringUtils.isBlank(title.getCases())) {
+            log.debug("No case title format defined for {}", resourceName);
+            return !fatal;
+        }
         return parseTitle(saksmappe, input, title.getCases());
     }
 
     public boolean parseRecordTitle(RegistreringResource registering, String input) {
+        if (StringUtils.isBlank(title.getRecords())) {
+            log.debug("No record title format defined for {}", resourceName);
+            return !fatal;
+        }
         return parseTitle(registering, input, title.getRecords());
     }
 
     public boolean parseDocumentTitle(DokumentbeskrivelseResource dokumentbeskrivelse, String input) {
+        if (StringUtils.isBlank(title.getDocuments())) {
+            log.debug("No document title format defined for {}", resourceName);
+            return !fatal;
+        }
         return parseTitle(dokumentbeskrivelse, input, title.getDocuments());
     }
 
     private boolean parseTitle(Object object, String title, String format) {
-        if (StringUtils.isBlank(format)) {
-            log.debug("No format defined for {}", TitleService.resourceName(object));
-            return !fatal;
-        }
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
         Matcher nameMatcher = names.matcher(format);
         List<String> nameList = new ArrayList<>();

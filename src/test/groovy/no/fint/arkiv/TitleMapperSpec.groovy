@@ -10,7 +10,7 @@ class TitleMapperSpec extends Specification {
     TitleMapper titleMapper
 
     void setup() {
-        titleMapper = new TitleMapper(new Title(
+        titleMapper = new TitleMapper('tilskuddfrip', new Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}: ${tittel}',
                 documents: '${saksaar}/${sakssekvensnummer}-${journalPostnummer} -- ${tittel}'
@@ -78,7 +78,7 @@ class TitleMapperSpec extends Specification {
 
     def 'Produce and parse case titles with a format containing {title}'() {
         given:
-        titleMapper = new TitleMapper(new Title(
+        titleMapper = new TitleMapper('tilskuddfrip', new Title(
                 'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}'
         ), Mock(LinkResolver), false)
         def r = new TilskuddFartoyResource(
@@ -149,7 +149,7 @@ class TitleMapperSpec extends Specification {
 
     def "Parsing when no format defined returns true unless fatal"() {
         given:
-        def service = new TitleMapper(new Title(), Mock(LinkResolver), false)
+        def service = new TitleMapper('tilskuddfrip', new Title(), Mock(LinkResolver), false)
 
         when:
         def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')
@@ -160,7 +160,7 @@ class TitleMapperSpec extends Specification {
 
     def 'Parsing when no format defined returns false if fatal'() {
         given:
-        def service = new TitleMapper(new Title(), Mock(LinkResolver), true)
+        def service = new TitleMapper('tilskuddfrip', new Title(), Mock(LinkResolver), true)
 
         when:
         def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')

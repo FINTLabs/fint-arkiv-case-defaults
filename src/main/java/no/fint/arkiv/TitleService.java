@@ -21,7 +21,8 @@ public class TitleService {
     }
 
     public <T> TitleMapper getTitleMapper(T object) {
-        return new TitleMapper(titles.getOrDefault(resourceName(object), new Title()), linkResolver, fatal);
+        final String resourceName = resourceName(object);
+        return new TitleMapper(resourceName, titles.getOrDefault(resourceName, new Title()), linkResolver, fatal);
     }
 
     public static String resourceName(Object object) {

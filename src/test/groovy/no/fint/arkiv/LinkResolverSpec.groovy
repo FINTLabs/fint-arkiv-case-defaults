@@ -13,8 +13,8 @@ class LinkResolverSpec extends Specification {
     def 'Test default resolution of List<Link> attributes'() {
         given:
         def resolver = Mock(LinkResolver)
-        def titleService = new TitleMapper(
-                new Title(cases:  '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'),
+        def titleService = new TitleMapper('tilskuddfrip',
+                new Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'),
                 resolver,
                 false)
         def r = new TilskuddFredaBygningPrivatEieResource(
