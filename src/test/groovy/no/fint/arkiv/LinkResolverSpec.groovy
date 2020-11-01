@@ -13,9 +13,10 @@ class LinkResolverSpec extends Specification {
     def 'Test default resolution of List<Link> attributes'() {
         given:
         def resolver = Mock(LinkResolver)
-        def titleService = new TitleService(resolver, new CustomFormats(title: [
-                'tilskuddfredabygningprivateie': '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'
-        ]))
+        def titleService = new TitleMapper(
+                new Title(cases:  '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'),
+                resolver,
+                false)
         def r = new TilskuddFredaBygningPrivatEieResource(
                 matrikkelnummer: new MatrikkelnummerResource(
                         gardsnummer: '1234',
@@ -28,7 +29,7 @@ class LinkResolverSpec extends Specification {
         r.matrikkelnummer.addKommunenummer(Link.with('https://api.felleskomponent.no/felles/kodeverk/kommune/systemid/3005'))
 
         when:
-        def title = titleService.getTitle(r)
+        def title = titleService.getCaseTitle(r)
 
         then:
         title == 'Villa Panderosa – 1234/56 – Tilskudd – Drammen, Viken – 223344-5'

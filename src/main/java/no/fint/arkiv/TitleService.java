@@ -11,13 +11,17 @@ import java.util.Map;
 public class TitleService {
 
     private final Map<String,Title> titles;
+    private final LinkResolver linkResolver;
+    private final boolean fatal;
 
-    public TitleService(CustomFormats formats) {
+    public TitleService(CustomFormats formats, LinkResolver linkResolver) {
         this.titles = formats.getTitle();
+        this.linkResolver = linkResolver;
+        this.fatal = formats.isFatal();
     }
 
     public <T> TitleMapper getTitleMapper(T object) {
-        return new TitleMapper(titles.getOrDefault(resourceName(object), new Title()));
+        return new TitleMapper(titles.getOrDefault(resourceName(object), new Title()), linkResolver, fatal);
     }
 
     public static String resourceName(Object object) {

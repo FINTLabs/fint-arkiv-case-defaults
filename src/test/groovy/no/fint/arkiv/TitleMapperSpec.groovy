@@ -1,9 +1,9 @@
 package no.fint.arkiv
 
 import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.fint.model.resource.arkiv.noark.JournalpostResource
 import spock.lang.Specification
 
 class TitleMapperSpec extends Specification {
@@ -14,7 +14,7 @@ class TitleMapperSpec extends Specification {
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}: ${tittel}',
                 documents: '${saksaar}/${sakssekvensnummer}-${journalPostnummer} -- ${tittel}'
-        ))
+        ), Mock(LinkResolver), false)
     }
 
     def "Format title from object"() {
@@ -80,7 +80,7 @@ class TitleMapperSpec extends Specification {
         given:
         titleMapper = new TitleMapper(new Title(
                 'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}'
-        ))
+        ), Mock(LinkResolver), false)
         def r = new TilskuddFartoyResource(
                 soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
                 fartoyNavn: 'Hestmann',
@@ -144,6 +144,52 @@ class TitleMapperSpec extends Specification {
         then:
         sak == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
         journalpost.every { it == 'XXYYZ - Hestmann: Vedtak om tilskudd' }
-        dokument.every {it == '2020/12-14 -- Vedtaksbrev'}
+        dokument.every { it == '2020/12-14 -- Vedtaksbrev' }
+    }
+
+    def "Parsing when no format defined returns true unless fatal"() {
+        given:
+        def service = new TitleMapper(new Title(), Mock(LinkResolver), false)
+
+        when:
+        def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')
+
+        then:
+        result
+    }
+
+    def 'Parsing when no format defined returns false if fatal'() {
+        given:
+        def service = new TitleMapper(new Title(), Mock(LinkResolver), true)
+
+        when:
+        def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')
+
+        then:
+        !result
+    }
+
+    def 'Return false if title does not match pattern'() {
+        given:
+        def t = 'Tilskudd fartøy: LDQT - Gamle Lofotferga - 139136-1 - 14812'
+        def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+
+        when:
+        def result = titleMapper.parseCaseTitle(r, t)
+
+        then:
+        !result
+    }
+
+    def 'Return true if title matches pattern'() {
+        given:
+        def t = 'LDQT - Gamle Lofotferga - Tilskudd - 139136-1 - 14812'
+        def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+
+        when:
+        def result = titleMapper.parseCaseTitle(r, t)
+
+        then:
+        result
     }
 }

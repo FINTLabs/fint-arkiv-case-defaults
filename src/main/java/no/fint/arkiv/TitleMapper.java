@@ -1,10 +1,9 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource;
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource;
-import no.fint.model.resource.administrasjon.arkiv.RegistreringResource;
-import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
+import no.fint.model.resource.arkiv.noark.RegistreringResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,45 +19,49 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleMapper {
     private final Title title;
+    private final LinkResolver linkResolver;
+    private final boolean fatal;
 
-    public TitleMapper(@NotNull Title title) {
+    public TitleMapper(@NotNull Title title, LinkResolver linkResolver, boolean fatal) {
         this.title = title;
+        this.linkResolver = linkResolver;
+        this.fatal = fatal;
     }
 
     public String getCaseTitle(SaksmappeResource saksmappe) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(saksmappe)).replace(title.getCases());
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, saksmappe)).replace(title.getCases());
         log.debug("Case title: '{}'", result);
         return result;
     }
 
     public String getRecordTitle(SaksmappeResource saksmappe, RegistreringResource registrering) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(registrering, saksmappe)).replace(title.getRecords());
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, registrering, saksmappe)).replace(title.getRecords());
         log.debug("Record title: '{}'", result);
         return result;
     }
 
     public String getDocumentTitle(SaksmappeResource saksmappe, RegistreringResource registering, DokumentbeskrivelseResource dokumentbeskrivelse) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(dokumentbeskrivelse, registering, saksmappe)).replace(title.getDocuments());
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(linkResolver, dokumentbeskrivelse, registering, saksmappe)).replace(title.getDocuments());
         log.debug("Document title: '{}'", result);
         return result;
     }
 
-    public void parseCaseTitle(SaksmappeResource saksmappe, String input) {
-        parseTitle(saksmappe, input, title.getCases());
+    public boolean parseCaseTitle(SaksmappeResource saksmappe, String input) {
+        return parseTitle(saksmappe, input, title.getCases());
     }
 
-    public void parseRecordTitle(RegistreringResource registering, String input) {
-        parseTitle(registering, input, title.getRecords());
+    public boolean parseRecordTitle(RegistreringResource registering, String input) {
+        return parseTitle(registering, input, title.getRecords());
     }
 
-    public void parseDocumentTitle(DokumentbeskrivelseResource dokumentbeskrivelse, String input) {
-        parseTitle(dokumentbeskrivelse, input, title.getDocuments());
+    public boolean parseDocumentTitle(DokumentbeskrivelseResource dokumentbeskrivelse, String input) {
+        return parseTitle(dokumentbeskrivelse, input, title.getDocuments());
     }
 
-    private void parseTitle(Object object, String title, String format) {
+    private boolean parseTitle(Object object, String title, String format) {
         if (StringUtils.isBlank(format)) {
             log.debug("No format defined for {}", TitleService.resourceName(object));
-            return;
+            return !fatal;
         }
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
         Matcher nameMatcher = names.matcher(format);
@@ -80,7 +83,9 @@ public class TitleMapper {
                     log.debug("Unable to set property {}", nameList.get(i - 1));
                 }
             }
+            return true;
         }
+        return false;
     }
 
 }
