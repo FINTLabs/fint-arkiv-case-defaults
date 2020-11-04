@@ -6,15 +6,17 @@ import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
 import no.fint.model.resource.arkiv.noark.JournalpostResource
 import spock.lang.Specification
 
-class TitleMapperSpec extends Specification {
-    TitleMapper titleMapper
+class TitleServiceSpec extends Specification {
+    TitleService titleService
+    Title title
 
     void setup() {
-        titleMapper = new TitleMapper('tilskuddfrip', new Title(
+        titleService = new TitleService(Mock(LinkResolver))
+        title = new Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}: ${tittel}',
-                documents: '${saksaar}/${sakssekvensnummer}-${journalPostnummer} -- ${tittel}'
-        ), Mock(LinkResolver), false)
+                documents: '${saksaar}/${sakssekvensnummer}-${journalPostnummer} -- ${tittel}',
+                fatal: false)
     }
 
     def "Format title from object"() {
@@ -27,7 +29,7 @@ class TitleMapperSpec extends Specification {
         )
 
         when:
-        def t = titleMapper.getCaseTitle(r)
+        def t = titleService.getCaseTitle(title, r)
         println(t)
 
         then:
@@ -40,7 +42,7 @@ class TitleMapperSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleMapper.parseCaseTitle(r, t)
+        titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -54,7 +56,7 @@ class TitleMapperSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleMapper.parseCaseTitle(r, t)
+        titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -67,7 +69,7 @@ class TitleMapperSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleMapper.parseCaseTitle(r, t)
+        titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -78,9 +80,9 @@ class TitleMapperSpec extends Specification {
 
     def 'Produce and parse case titles with a format containing {title}'() {
         given:
-        titleMapper = new TitleMapper('tilskuddfrip', new Title(
-                'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}'
-        ), Mock(LinkResolver), false)
+        def myTitle = new Title(
+                'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}',
+                fatal: false)
         def r = new TilskuddFartoyResource(
                 soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
                 fartoyNavn: 'Hestmann',
@@ -90,14 +92,14 @@ class TitleMapperSpec extends Specification {
         )
 
         when:
-        def t = titleMapper.getCaseTitle(r)
+        def t = titleService.getCaseTitle(myTitle, r)
 
         then:
         t == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345: Hei og hallo'
 
         when:
         r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
-        titleMapper.parseCaseTitle(r, t)
+        titleService.parseCaseTitle(myTitle, r, t)
 
         then:
         r.kallesignal == 'XXYYZ'
@@ -132,12 +134,12 @@ class TitleMapperSpec extends Specification {
         )
 
         when:
-        def sak = titleMapper.getCaseTitle(r)
-        def journalpost = r.journalpost.collect { titleMapper.getRecordTitle(r, it) }
+        def sak = titleService.getCaseTitle(title, r)
+        def journalpost = r.journalpost.collect { titleService.getRecordTitle(title, r, it) }
         def dokument = r.journalpost.collect {
             j ->
                 j.dokumentbeskrivelse.collect {
-                    titleMapper.getDocumentTitle(r, j, it)
+                    titleService.getDocumentTitle(title, r, j, it)
                 }
         }.flatten()
 
@@ -149,10 +151,10 @@ class TitleMapperSpec extends Specification {
 
     def "Parsing when no format defined returns true unless fatal"() {
         given:
-        def service = new TitleMapper('tilskuddfrip', new Title(), Mock(LinkResolver), false)
+        title = new Title(fatal: false)
 
         when:
-        def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')
+        def result = titleService.parseCaseTitle(title, new TilskuddFartoyResource(), 'Hello there')
 
         then:
         result
@@ -160,10 +162,10 @@ class TitleMapperSpec extends Specification {
 
     def 'Parsing when no format defined returns false if fatal'() {
         given:
-        def service = new TitleMapper('tilskuddfrip', new Title(), Mock(LinkResolver), true)
+        title = new Title(fatal: true)
 
         when:
-        def result = service.parseCaseTitle(new TilskuddFartoyResource(), 'Hello there')
+        def result = titleService.parseCaseTitle(title, new TilskuddFartoyResource(), 'Hello there')
 
         then:
         !result
@@ -175,7 +177,7 @@ class TitleMapperSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        def result = titleMapper.parseCaseTitle(r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
 
         then:
         !result
@@ -187,7 +189,7 @@ class TitleMapperSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        def result = titleMapper.parseCaseTitle(r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
 
         then:
         result
