@@ -14,8 +14,8 @@ class TitleServiceSpec extends Specification {
         titleService = new TitleService(Mock(LinkResolver))
         title = new Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
-                records: '${kallesignal} - ${fartoyNavn}: ${tittel}',
-                documents: '${saksaar}/${sakssekvensnummer}-${journalPostnummer} -- ${tittel}',
+                records: '${kallesignal} - ${fartoyNavn}:',
+                documents: '${saksaar}/${sakssekvensnummer} --',
                 fatal: false)
     }
 
@@ -135,18 +135,18 @@ class TitleServiceSpec extends Specification {
 
         when:
         def sak = titleService.getCaseTitle(title, r)
-        def journalpost = r.journalpost.collect { titleService.getRecordTitle(title, r, it) }
+        def journalpost = r.journalpost.collect { titleService.getRecordTitlePrefix(title, r) + it.tittel }
         def dokument = r.journalpost.collect {
             j ->
                 j.dokumentbeskrivelse.collect {
-                    titleService.getDocumentTitle(title, r, j, it)
+                    titleService.getDocumentTitlePrefix(title, r) + it.tittel
                 }
         }.flatten()
 
         then:
         sak == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
         journalpost.every { it == 'XXYYZ - Hestmann: Vedtak om tilskudd' }
-        dokument.every { it == '2020/12-14 -- Vedtaksbrev' }
+        dokument.every { it == '2020/12 -- Vedtaksbrev' }
     }
 
     def "Parsing when no format defined returns true unless fatal"() {
