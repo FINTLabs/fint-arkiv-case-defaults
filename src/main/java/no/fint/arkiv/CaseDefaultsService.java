@@ -25,6 +25,9 @@ public abstract class CaseDefaultsService {
     @Autowired
     protected CodingSystemService codingSystemService;
 
+    @Autowired
+    protected SubstitutorService substitutorService;
+
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
             return;
@@ -58,7 +61,7 @@ public abstract class CaseDefaultsService {
             ));
         }
         if (!isEmpty(properties.getKlassifikasjon()) && isEmpty(resource.getKlasse())) {
-            final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resource));
+            final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
             resource.setKlasse(
                     properties.getKlassifikasjon().entrySet().stream()
                             .map(entry -> {

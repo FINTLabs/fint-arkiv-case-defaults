@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-@SpringBootTest(classes = [CodingSystemDefaults, CodingSystemService, NoarkMetadataService, TestCaseDefaultsService, CaseDefaults])
+@SpringBootTest(classes = [CodingSystemDefaults, CodingSystemService, NoarkMetadataService, TestCaseDefaultsService, CaseDefaults, SubstitutorService, TestLinkResolver])
 @ActiveProfiles(['spock'])
 class CodingSystemSpec extends Specification {
 
