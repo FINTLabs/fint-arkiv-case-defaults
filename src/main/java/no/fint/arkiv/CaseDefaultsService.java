@@ -86,7 +86,6 @@ public abstract class CaseDefaultsService {
     }
 
     public void applyDefaultsForUpdate(CaseProperties properties, SaksmappeResource resource) {
-        codingSystemService.mapCodingSystemLinks(resource);
         if (!isEmpty(resource.getPart())) {
             resource.getPart().forEach(codingSystemService::mapCodingSystemLinks);
         }
@@ -97,18 +96,19 @@ public abstract class CaseDefaultsService {
             return;
         }
         resource.getJournalpost().forEach(journalpost -> applyDefaultsForJournalpost(properties, journalpost));
+        codingSystemService.mapCodingSystemLinks(resource);
     }
 
     protected void applyDefaultsForJournalpost(CaseProperties properties, JournalpostResource journalpost) {
         codingSystemService.mapCodingSystemLinks(journalpost);
         journalpost.getKorrespondansepart().forEach(korrespondanse -> {
-            codingSystemService.mapCodingSystemLinks(korrespondanse);
             if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
                 korrespondanse.addKorrespondanseparttype(Link.with(
                         KorrespondansepartType.class,
                         "systemid",
                         properties.getKorrespondansepartType()));
             }
+            codingSystemService.mapCodingSystemLinks(korrespondanse);
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
@@ -132,6 +132,7 @@ public abstract class CaseDefaultsService {
         }
 
         applyDefaultsForRegistrering(properties, journalpost);
+        codingSystemService.mapCodingSystemLinks(journalpost);
     }
 
     protected void applyDefaultsForRegistrering(CaseProperties properties, RegistreringResource registrering) {
@@ -204,6 +205,7 @@ public abstract class CaseDefaultsService {
             dokumentbeskrivelse.setSkjerming(skjerming);
         }
 
+        codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
     }
 
     protected static <T> boolean contains(T[] array, T value) {
