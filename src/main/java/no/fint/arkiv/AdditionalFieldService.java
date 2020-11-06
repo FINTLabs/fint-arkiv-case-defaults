@@ -20,9 +20,11 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class AdditionalFieldService {
+    private final LinkResolver resolver;
     private final Map<String, Map<String, String>> fieldFormats;
 
-    public AdditionalFieldService(CustomFormats customFormats) {
+    public AdditionalFieldService(LinkResolver resolver, CustomFormats customFormats) {
+        this.resolver = resolver;
         this.fieldFormats = customFormats.getField();
     }
 
@@ -41,7 +43,7 @@ public class AdditionalFieldService {
             log.warn("No custom fields for {}", type);
             return Stream.empty();
         }
-        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resource));
+        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resolver, resource));
         return fields.entrySet().stream()
                 .map(e -> new Field(e.getKey(),
                         substitutor.replace(e.getValue())));
