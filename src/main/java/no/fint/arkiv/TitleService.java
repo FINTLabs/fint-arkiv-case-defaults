@@ -43,9 +43,9 @@ public class TitleService {
     }
 
     public boolean parseCaseTitle(Title title, SaksmappeResource saksmappe, String input) {
-        if (StringUtils.isBlank(title.getCases())) {
+        if (title == null || StringUtils.isBlank(title.getCases())) {
             log.debug("No case title format defined");
-            return !title.isFatal();
+            return false;
         }
         return parseTitle(saksmappe, input, title.getCases());
     }
