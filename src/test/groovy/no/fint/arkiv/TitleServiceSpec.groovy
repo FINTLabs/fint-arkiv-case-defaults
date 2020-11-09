@@ -15,8 +15,7 @@ class TitleServiceSpec extends Specification {
         title = new Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}:',
-                documents: '${saksaar}/${sakssekvensnummer} --',
-                fatal: false)
+                documents: '${saksaar}/${sakssekvensnummer} --')
     }
 
     def "Format title from object"() {

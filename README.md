@@ -60,10 +60,11 @@ Properties in the `${name}` format will be evaluated and parsed.
    - Invoke `getCaseTitle()` on `TitleMapper` to create case title.
    - Invoke `getRecordTitlePrefix()` and `getDocumentTitlePrefix()` to obtain prefixes for records and documents. 
 4. Reading: Invoke `parseCaseTitle()` on `TitleMapper` to apply case properties from the case title.
+   - This method returns `true` if the case title matched the expected pattern.
 
 ## AdditionalFieldService
 
-This service is used to apply custom attributes (additional fields) in the system specific objects
+Use this service to apply custom attributes (additional fields) in the system specific objects
 to / from case attributes.
 
 This is controlled by properties of the format `fint.case.defaults.<casetype>.field.<customField>` where
