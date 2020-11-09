@@ -1,11 +1,13 @@
 package no.fint.arkiv;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.Map;
 
 @Data
 public class CaseProperties {
+    @NestedConfigurationProperty
     private Title title;
     private Map<String,String> field;
     private String administrativEnhet;
