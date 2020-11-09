@@ -11,9 +11,12 @@ import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
@@ -85,7 +88,16 @@ public abstract class CaseDefaultsService {
             resource.setSkjerming(skjerming);
         }
 
+        defaultDate(resource::getOpprettetDato, resource::setOpprettetDato);
+        defaultDate(resource::getSaksdato, resource::setSaksdato);
+
         applyDefaultsForUpdate(properties, resource);
+    }
+
+    protected void defaultDate(Supplier<Date> getter, Consumer<Date> setter) {
+        if (getter.get() == null) {
+            setter.accept(new Date());
+        }
     }
 
     public void applyDefaultsForUpdate(CaseProperties properties, SaksmappeResource resource) {
@@ -103,6 +115,10 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForJournalpost(CaseProperties properties, JournalpostResource journalpost) {
+        defaultDate(journalpost::getOpprettetDato, journalpost::setOpprettetDato);
+        defaultDate(journalpost::getDokumentetsDato, journalpost::setDokumentetsDato);
+        defaultDate(journalpost::getJournalDato, journalpost::setJournalDato);
+
         codingSystemService.mapCodingSystemLinks(journalpost);
         journalpost.getKorrespondansepart().forEach(korrespondanse -> {
             if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
@@ -115,6 +131,14 @@ public abstract class CaseDefaultsService {
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
+            switch (properties.getJournalpostType()) {
+                case "I":
+                    defaultDate(journalpost::getMottattDato, journalpost::setMottattDato);
+                    break;
+                case "U":
+                    defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
+                    break;
+            }
             journalpost.addJournalposttype(Link.with(
                     JournalpostType.class,
                     "systemid",
@@ -173,6 +197,9 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForDokument(CaseProperties properties, DokumentbeskrivelseResource dokumentbeskrivelse) {
+        defaultDate(dokumentbeskrivelse::getOpprettetDato, dokumentbeskrivelse::setOpprettetDato);
+        defaultDate(dokumentbeskrivelse::getTilknyttetDato, dokumentbeskrivelse::setTilknyttetDato);
+
         codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
         if (dokumentbeskrivelse.getDokumentobjekt() != null) {
             dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
