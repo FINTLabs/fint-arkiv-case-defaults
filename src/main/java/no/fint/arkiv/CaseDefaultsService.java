@@ -7,13 +7,13 @@ import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
+import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -23,6 +23,9 @@ public abstract class CaseDefaultsService {
 
     @Autowired
     protected CodingSystemService codingSystemService;
+
+    @Autowired
+    protected SubstitutorService substitutorService;
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -56,17 +59,17 @@ public abstract class CaseDefaultsService {
                     properties.getAdministrativEnhet()
             ));
         }
-        if (!isEmpty(properties.getKlassifikasjon()) && !isEmpty(properties.getKlasse())
-                && isEmpty(resource.getKlasse())) {
+        if (!isEmpty(properties.getKlassifikasjon()) && isEmpty(resource.getKlasse())) {
+            final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
             resource.setKlasse(
-                    IntStream.range(0, properties.getKlasse().length)
-                            .mapToObj(i -> {
-                                String klassifikasjon = properties.getKlassifikasjon()[Math.min(properties.getKlassifikasjon().length - 1, i)];
-                                String klasse = properties.getKlasse()[i];
+                    properties.getKlassifikasjon().entrySet().stream()
+                            .map(entry -> {
+                                CaseProperties.Klassifikasjon it = entry.getValue();
+                                String klassifikasjon = it.getSystem();
                                 KlasseResource result = new KlasseResource();
-                                result.setRekkefolge(i + 1);
-                                result.setKlasseId(klasse);
-                                result.setTittel(klasse);
+                                result.setRekkefolge(entry.getKey());
+                                result.setKlasseId(substitutor.replace(it.getKlasse()));
+                                result.setTittel(substitutor.replace(it.getTittel()));
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             }).collect(Collectors.toList()));
@@ -81,7 +84,16 @@ public abstract class CaseDefaultsService {
             resource.setSkjerming(skjerming);
         }
 
+        defaultDate(resource::getOpprettetDato, resource::setOpprettetDato);
+        defaultDate(resource::getSaksdato, resource::setSaksdato);
+
         applyDefaultsForUpdate(properties, resource);
+    }
+
+    protected void defaultDate(Supplier<Date> getter, Consumer<Date> setter) {
+        if (getter.get() == null) {
+            setter.accept(new Date());
+        }
     }
 
     public void applyDefaultsForUpdate(CaseProperties properties, SaksmappeResource resource) {
@@ -99,6 +111,10 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForJournalpost(CaseProperties properties, JournalpostResource journalpost) {
+        defaultDate(journalpost::getOpprettetDato, journalpost::setOpprettetDato);
+        defaultDate(journalpost::getDokumentetsDato, journalpost::setDokumentetsDato);
+        defaultDate(journalpost::getJournalDato, journalpost::setJournalDato);
+
         codingSystemService.mapCodingSystemLinks(journalpost);
         journalpost.getKorrespondansepart().forEach(korrespondanse -> {
             if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
@@ -111,6 +127,14 @@ public abstract class CaseDefaultsService {
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
+            switch (properties.getJournalpostType()) {
+                case "I":
+                    defaultDate(journalpost::getMottattDato, journalpost::setMottattDato);
+                    break;
+                case "U":
+                    defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
+                    break;
+            }
             journalpost.addJournalposttype(Link.with(
                     JournalpostType.class,
                     "systemid",
@@ -169,6 +193,9 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForDokument(CaseProperties properties, DokumentbeskrivelseResource dokumentbeskrivelse) {
+        defaultDate(dokumentbeskrivelse::getOpprettetDato, dokumentbeskrivelse::setOpprettetDato);
+        defaultDate(dokumentbeskrivelse::getTilknyttetDato, dokumentbeskrivelse::setTilknyttetDato);
+
         codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
         if (dokumentbeskrivelse.getDokumentobjekt() != null) {
             dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
@@ -211,8 +238,12 @@ public abstract class CaseDefaultsService {
         return Objects.nonNull(array) && Arrays.asList(array).contains(value);
     }
 
-    protected static boolean isEmpty(List<?> list) {
-        return Objects.isNull(list) || list.isEmpty();
+    protected static boolean isEmpty(Collection<?> collection) {
+        return Objects.isNull(collection) || collection.isEmpty();
+    }
+
+    protected static boolean isEmpty(Map<?,?> map) {
+        return Objects.isNull(map) || map.isEmpty();
     }
 
     protected static <T> boolean isEmpty(T[] array) {

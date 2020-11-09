@@ -11,7 +11,7 @@ class TitleServiceSpec extends Specification {
     Title title
 
     void setup() {
-        titleService = new TitleService(Mock(LinkResolver))
+        titleService = new TitleService(new SubstitutorService(Mock(LinkResolver)))
         title = new Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}:',
@@ -68,10 +68,11 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleService.parseCaseTitle(title, r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
+        result
         r.fartoyNavn == 'Gamle Lofotferga'
         r.kallesignal == 'LDQT'
         r.soknadsnummer.identifikatorverdi == '14812'

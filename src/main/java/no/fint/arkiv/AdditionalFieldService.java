@@ -19,10 +19,10 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class AdditionalFieldService {
-    private final LinkResolver resolver;
+    private final SubstitutorService substitutorService;
 
-    public AdditionalFieldService(LinkResolver resolver) {
-        this.resolver = resolver;
+    public AdditionalFieldService(SubstitutorService substitutorService) {
+        this.substitutorService = substitutorService;
     }
 
     public <T> Stream<Field> getFieldsForResource(Map<String,String> fields, T resource) {
@@ -30,7 +30,7 @@ public class AdditionalFieldService {
             log.warn("No custom fields for {}", resource.getClass());
             return Stream.empty();
         }
-        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resolver, resource));
+        final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
         return fields.entrySet().stream()
                 .map(e -> new Field(e.getKey(),
                         substitutor.replace(e.getValue())));
