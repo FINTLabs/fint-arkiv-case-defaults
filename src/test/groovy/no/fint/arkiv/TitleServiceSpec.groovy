@@ -80,8 +80,7 @@ class TitleServiceSpec extends Specification {
     def 'Produce and parse case titles with a format containing {title}'() {
         given:
         def myTitle = new Title(
-                'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}',
-                fatal: false)
+                'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}')
         def r = new TilskuddFartoyResource(
                 soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
                 fartoyNavn: 'Hestmann',
@@ -146,28 +145,6 @@ class TitleServiceSpec extends Specification {
         sak == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
         journalpost.every { it == 'XXYYZ - Hestmann: Vedtak om tilskudd' }
         dokument.every { it == '2020/12 -- Vedtaksbrev' }
-    }
-
-    def "Parsing when no format defined returns true unless fatal"() {
-        given:
-        title = new Title(fatal: false)
-
-        when:
-        def result = titleService.parseCaseTitle(title, new TilskuddFartoyResource(), 'Hello there')
-
-        then:
-        result
-    }
-
-    def 'Parsing when no format defined returns false if fatal'() {
-        given:
-        title = new Title(fatal: true)
-
-        when:
-        def result = titleService.parseCaseTitle(title, new TilskuddFartoyResource(), 'Hello there')
-
-        then:
-        !result
     }
 
     def 'Return false if title does not match pattern'() {
