@@ -23,25 +23,25 @@ public class TitleService {
         this.substitutorService = substitutorService;
     }
 
-    public <T extends SaksmappeResource> String getCaseTitle(Title title, T saksmappe) {
+    public <T extends SaksmappeResource> String getCaseTitle(CaseProperties.Title title, T saksmappe) {
         String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getCases());
         log.debug("{} - Case title: '{}'", resourceName(saksmappe), result);
         return result;
     }
 
-    public <T extends SaksmappeResource> String getRecordTitlePrefix(Title title, T saksmappe) {
+    public <T extends SaksmappeResource> String getRecordTitlePrefix(CaseProperties.Title title, T saksmappe) {
         String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getRecords());
         log.debug("{} - Record title: '{}'", resourceName(saksmappe), result);
         return result == null ? "" : result + " ";
     }
 
-    public <T extends SaksmappeResource> String getDocumentTitlePrefix(Title title, T saksmappe) {
+    public <T extends SaksmappeResource> String getDocumentTitlePrefix(CaseProperties.Title title, T saksmappe) {
         String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getDocuments());
         log.debug("{} - Document title: '{}'", resourceName(saksmappe), result);
         return result == null ? "" : result + " ";
     }
 
-    public boolean parseCaseTitle(Title title, SaksmappeResource saksmappe, String input) {
+    public boolean parseCaseTitle(CaseProperties.Title title, SaksmappeResource saksmappe, String input) {
         if (title == null || StringUtils.isBlank(title.getCases())) {
             log.debug("No case title format defined");
             return false;

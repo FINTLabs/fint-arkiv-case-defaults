@@ -8,11 +8,11 @@ import spock.lang.Specification
 
 class TitleServiceSpec extends Specification {
     TitleService titleService
-    Title title
+    CaseProperties.Title title
 
     void setup() {
         titleService = new TitleService(new SubstitutorService(Mock(LinkResolver)))
-        title = new Title(
+        title = new CaseProperties.Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}:',
                 documents: '${saksaar}/${sakssekvensnummer} --')
@@ -80,7 +80,7 @@ class TitleServiceSpec extends Specification {
 
     def 'Produce and parse case titles with a format containing {title}'() {
         given:
-        def myTitle = new Title(
+        def myTitle = new CaseProperties.Title(
                 'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}')
         def r = new TilskuddFartoyResource(
                 soknadsnummer: new Identifikator(identifikatorverdi: '12345'),

@@ -14,7 +14,7 @@ class LinkResolverSpec extends Specification {
         given:
         def resolver = Mock(LinkResolver)
         def titleService = new TitleService(new SubstitutorService(resolver))
-        def title = new Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}')
+        def title = new CaseProperties.Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}')
         def r = new TilskuddFredaBygningPrivatEieResource(
                 matrikkelnummer: new MatrikkelnummerResource(
                         gardsnummer: '1234',
