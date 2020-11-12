@@ -2,15 +2,14 @@ package no.fint.arkiv;
 
 import lombok.Data;
 
-import java.util.Map;
-
 @Data
 public class CaseProperties {
     private String administrativEnhet;
     private String journalenhet;
     private String arkivdel;
     private String[] noekkelord;
-    private Map<Integer, Klassifikasjon> klassifikasjon;
+    private String[] klassifikasjon;
+    private String[] klasse;
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
@@ -23,13 +22,5 @@ public class CaseProperties {
     private String skjermingshjemmel;
     private String saksmappeType;
 
-    public enum Skjermingskontekst {SAK, JOURNALPOST, DOKUMENT}
-
-    @Data
-    public static class Klassifikasjon {
-        private String
-                system,
-                klasse,
-                tittel;
-    }
+    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
 }

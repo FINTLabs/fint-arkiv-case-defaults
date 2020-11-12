@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,12 +18,12 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleService {
 
-    private final SubstitutorService substitutorService;
+    private final LinkResolver resolver;
     private final Map<String, String> titles;
     private final boolean fatal;
 
-    public TitleService(SubstitutorService substitutorService, CustomFormats formats) {
-        this.substitutorService = substitutorService;
+    public TitleService(LinkResolver resolver, CustomFormats formats) {
+        this.resolver = resolver;
         this.titles = formats.getTitle();
         this.fatal = formats.isFatal();
     }
@@ -32,7 +33,7 @@ public class TitleService {
         if (fatal && !titles.containsKey(type)) {
             throw new IllegalArgumentException("No format defined for " + type);
         }
-        String title = substitutorService.getSubstitutorForResource(object).replace(titles.get(type));
+        String title = new StringSubstitutor(new BeanPropertyLookup<>(resolver, object)).replace(titles.get(type));
         log.debug("Title: '{}'", title);
         return title;
     }

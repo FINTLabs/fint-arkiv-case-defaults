@@ -13,7 +13,7 @@ class LinkResolverSpec extends Specification {
     def 'Test default resolution of List<Link> attributes'() {
         given:
         def resolver = Mock(LinkResolver)
-        def titleService = new TitleService(new SubstitutorService(resolver), new CustomFormats(title: [
+        def titleService = new TitleService(resolver, new CustomFormats(title: [
                 'tilskuddfredabygningprivateie': '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'
         ]))
         def r = new TilskuddFredaBygningPrivatEieResource(
