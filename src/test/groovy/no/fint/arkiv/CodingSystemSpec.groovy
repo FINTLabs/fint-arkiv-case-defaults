@@ -2,18 +2,16 @@ package no.fint.arkiv
 
 import no.fint.model.arkiv.kodeverk.*
 import no.fint.model.resource.Link
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
 import no.fint.model.resource.arkiv.noark.JournalpostResource
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource
 import no.fint.model.resource.arkiv.noark.SakResource
-import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
-@SpringBootTest(classes = [CodingSystemDefaults, CodingSystemService, NoarkMetadataService, TestCaseDefaultsService, CaseDefaults, SubstitutorService, TestLinkResolver])
+@SpringBootTest(classes = [CodingSystemDefaults, CodingSystemService, NoarkMetadataService])
 @ActiveProfiles(['spock'])
 class CodingSystemSpec extends Specification {
 
@@ -25,12 +23,6 @@ class CodingSystemSpec extends Specification {
 
     @Autowired
     NoarkMetadataService noarkMetadataService
-
-    @Autowired
-    TestCaseDefaultsService caseDefaultsService
-
-    @Autowired
-    CaseDefaults caseDefaults
 
     def 'Verify all metadata streams are supported'() {
         expect:
@@ -98,23 +90,6 @@ class CodingSystemSpec extends Specification {
         then:
         dokument.getDokumentstatus().any {it.href.endsWith('/12')}
         dokument.getTilknyttetRegistreringSom().any {it.href.endsWith('/1')}
-    }
-
-    def 'Able to apply defaults to case'() {
-        given:
-        def resource = new TilskuddFredaBygningPrivatEieResource(
-                matrikkelnummer: new MatrikkelnummerResource(
-                        gardsnummer: '123',
-                        bruksnummer: '456'
-                )
-        )
-
-        when:
-        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfredabygningprivateie(), resource)
-        println(resource)
-
-        then:
-        resource.klasse.any {it.klasseId=='123/456' }
     }
 
 }

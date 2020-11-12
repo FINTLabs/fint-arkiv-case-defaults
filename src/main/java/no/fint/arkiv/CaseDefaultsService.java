@@ -8,13 +8,16 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
-import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -24,9 +27,6 @@ public abstract class CaseDefaultsService {
 
     @Autowired
     protected CodingSystemService codingSystemService;
-
-    @Autowired
-    protected SubstitutorService substitutorService;
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -67,17 +67,17 @@ public abstract class CaseDefaultsService {
                     properties.getSaksansvarlig()
             ));
         }
-        if (!isEmpty(properties.getKlassifikasjon()) && isEmpty(resource.getKlasse())) {
-            final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
+        if (!isEmpty(properties.getKlassifikasjon()) && !isEmpty(properties.getKlasse())
+                && isEmpty(resource.getKlasse())) {
             resource.setKlasse(
-                    properties.getKlassifikasjon().entrySet().stream()
-                            .map(entry -> {
-                                CaseProperties.Klassifikasjon it = entry.getValue();
-                                String klassifikasjon = it.getSystem();
+                    IntStream.range(0, properties.getKlasse().length)
+                            .mapToObj(i -> {
+                                String klassifikasjon = properties.getKlassifikasjon()[Math.min(properties.getKlassifikasjon().length - 1, i)];
+                                String klasse = properties.getKlasse()[i];
                                 KlasseResource result = new KlasseResource();
-                                result.setRekkefolge(entry.getKey());
-                                result.setKlasseId(substitutor.replace(it.getKlasse()));
-                                result.setTittel(substitutor.replace(it.getTittel()));
+                                result.setRekkefolge(i + 1);
+                                result.setKlasseId(klasse);
+                                result.setTittel(klasse);
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             }).collect(Collectors.toList()));
@@ -253,12 +253,8 @@ public abstract class CaseDefaultsService {
         return Objects.nonNull(array) && Arrays.asList(array).contains(value);
     }
 
-    protected static boolean isEmpty(Collection<?> collection) {
-        return Objects.isNull(collection) || collection.isEmpty();
-    }
-
-    protected static boolean isEmpty(Map<?,?> map) {
-        return Objects.isNull(map) || map.isEmpty();
+    protected static boolean isEmpty(List<?> list) {
+        return Objects.isNull(list) || list.isEmpty();
     }
 
     protected static <T> boolean isEmpty(T[] array) {
