@@ -9,12 +9,14 @@ public class CaseProperties {
     private String administrativEnhet;
     private String journalenhet;
     private String arkivdel;
+    private String saksansvarlig;
     private String[] noekkelord;
     private Map<Integer, Klassifikasjon> klassifikasjon;
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
     private String journalstatus;
+    private String saksbehandler;
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;
