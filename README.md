@@ -42,6 +42,13 @@ It is bidirectional, meaning case properties can also be parsed and applied from
 This is controlled by the property `fint.case.formats.title.<casetype>`.  Properties in the `${name}` 
 format will be evaluated and parsed. 
 
+### Example
+`Løyve drosje - ${tittel} - ${organisasjonsnummer}`
+
+gives
+
+`Løyve drosje - Centro Taxi AS - 222333444`
+
 ## AdditionalFieldService
 
 This service is used to apply custom attributes (additional fields) in the system specific objects
