@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.arkiv.kodeverk.*;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
+import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
@@ -57,6 +58,13 @@ public abstract class CaseDefaultsService {
                     AdministrativEnhet.class,
                     "systemid",
                     properties.getAdministrativEnhet()
+            ));
+        }
+        if (isNotBlank(properties.getSaksansvarlig()) && isEmpty(resource.getSaksansvarlig())) {
+            resource.addSaksansvarlig(Link.with(
+                    Arkivressurs.class,
+                    "systemid",
+                    properties.getSaksansvarlig()
             ));
         }
         if (!isEmpty(properties.getKlassifikasjon()) && !isEmpty(properties.getKlasse())
@@ -178,6 +186,13 @@ public abstract class CaseDefaultsService {
                     AdministrativEnhet.class,
                     "systemid",
                     properties.getAdministrativEnhet()
+            ));
+        }
+        if (isNotBlank(properties.getSaksbehandler()) && isEmpty(registrering.getSaksbehandler())) {
+            registrering.addSaksbehandler(Link.with(
+                    Arkivressurs.class,
+                    "systemid",
+                    properties.getSaksbehandler()
             ));
         }
 

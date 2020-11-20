@@ -14,7 +14,9 @@ applied by the adapter if these values have not been set by the client.
 ### Properties for each case type
 
 - `administrativEnhet`
+- `journalenhet`
 - `arkivdel`
+- `saksansvarlig`
 - `noekkelord`
 - `klassifikasjon`
 - `klasse`
@@ -22,6 +24,7 @@ applied by the adapter if these values have not been set by the client.
 - `korrespondansepartType`
 - `journalpostType`
 - `journalstatus`
+- `saksbehandler`
 - `dokumentstatus`
 - `dokumentType`
 - `tilknyttetRegistreringSom`
