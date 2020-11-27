@@ -11,6 +11,7 @@ public class CaseProperties {
     private String administrativEnhet;
     private String journalenhet;
     private String arkivdel;
+    private String saksansvarlig;
     private String[] noekkelord;
     private String[] klassifikasjon;
     private String[] klasse;
@@ -18,6 +19,7 @@ public class CaseProperties {
     private String korrespondansepartType;
     private String journalpostType;
     private String journalstatus;
+    private String saksbehandler;
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;

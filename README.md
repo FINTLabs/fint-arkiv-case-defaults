@@ -18,6 +18,7 @@ applied by the adapter if these values have not been set by the client.
 - `administrativEnhet`
 - `journalenhet`
 - `arkivdel`
+- `saksansvarlig`
 - `noekkelord`
 - `klassifikasjon`
 - `klasse`
@@ -25,6 +26,7 @@ applied by the adapter if these values have not been set by the client.
 - `korrespondansepartType`
 - `journalpostType`
 - `journalstatus`
+- `saksbehandler`
 - `dokumentstatus`
 - `dokumentType`
 - `tilknyttetRegistreringSom`
@@ -61,6 +63,13 @@ Properties in the `${name}` format will be evaluated and parsed.
    - Invoke `getRecordTitlePrefix()` and `getDocumentTitlePrefix()` to obtain prefixes for records and documents. 
 4. Reading: Invoke `parseCaseTitle()` on `TitleMapper` to apply case properties from the case title.
    - This method returns `true` if the case title matched the expected pattern.
+
+### Example
+`Løyve drosje - ${tittel} - ${organisasjonsnummer}`
+
+gives
+
+`Løyve drosje - Centro Taxi AS - 222333444`
 
 ## AdditionalFieldService
 
