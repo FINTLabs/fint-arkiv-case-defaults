@@ -19,24 +19,24 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class AdditionalFieldService {
-    private final SubstitutorService substitutorService;
+    private final LinkResolver resolver;
 
-    public AdditionalFieldService(SubstitutorService substitutorService) {
-        this.substitutorService = substitutorService;
+    public AdditionalFieldService(LinkResolver resolver) {
+        this.resolver = resolver;
     }
 
-    public <T> Stream<Field> getFieldsForResource(Map<String,String> fields, T resource) {
+    public <T> Stream<Field> getFieldsForResource(Map<String, String> fields, T resource) {
         if (fields == null) {
             log.warn("No custom fields for {}", resource.getClass());
             return Stream.empty();
         }
-        final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
+        final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resolver, resource));
         return fields.entrySet().stream()
                 .map(e -> new Field(e.getKey(),
                         substitutor.replace(e.getValue())));
     }
 
-    public <U> void setFieldsForResource(Map<String,String> fieldMap, U resource, List<Field> fields) {
+    public <U> void setFieldsForResource(Map<String, String> fieldMap, U resource, List<Field> fields) {
         if (fieldMap == null) {
             return;
         }

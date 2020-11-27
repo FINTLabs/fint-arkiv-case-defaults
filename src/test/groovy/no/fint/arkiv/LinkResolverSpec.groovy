@@ -1,6 +1,5 @@
 package no.fint.arkiv
 
-
 import no.fint.model.resource.Link
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
 import no.fint.model.resource.felles.kodeverk.FylkeResource
@@ -13,8 +12,8 @@ class LinkResolverSpec extends Specification {
     def 'Test default resolution of List<Link> attributes'() {
         given:
         def resolver = Mock(LinkResolver)
-        def titleService = new TitleService(new SubstitutorService(resolver))
         def title = new CaseProperties.Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}')
+        def titleService = new TitleService(resolver)
         def r = new TilskuddFredaBygningPrivatEieResource(
                 matrikkelnummer: new MatrikkelnummerResource(
                         gardsnummer: '1234',

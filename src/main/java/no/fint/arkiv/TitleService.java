@@ -5,6 +5,7 @@ import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,26 +18,26 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleService {
 
-    private final SubstitutorService substitutorService;
+    private final LinkResolver resolver;
 
-    public TitleService(SubstitutorService substitutorService) {
-        this.substitutorService = substitutorService;
+    public TitleService(LinkResolver resolver) {
+        this.resolver = resolver;
     }
 
     public <T extends SaksmappeResource> String getCaseTitle(CaseProperties.Title title, T saksmappe) {
-        String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getCases());
-        log.debug("{} - Case title: '{}'", resourceName(saksmappe), result);
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getCases());
+        log.debug("Title: '{}'", result);
         return result;
     }
 
     public <T extends SaksmappeResource> String getRecordTitlePrefix(CaseProperties.Title title, T saksmappe) {
-        String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getRecords());
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getRecords());
         log.debug("{} - Record title: '{}'", resourceName(saksmappe), result);
         return result == null ? "" : result + " ";
     }
 
     public <T extends SaksmappeResource> String getDocumentTitlePrefix(CaseProperties.Title title, T saksmappe) {
-        String result = substitutorService.getSubstitutorForResource(saksmappe).replace(title.getDocuments());
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getDocuments());
         log.debug("{} - Document title: '{}'", resourceName(saksmappe), result);
         return result == null ? "" : result + " ";
     }
