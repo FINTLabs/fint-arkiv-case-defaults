@@ -2,8 +2,12 @@ package no.fint.arkiv;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class CaseProperties {
+    private Title title;
+    private Map<String,String> field;
     private String administrativEnhet;
     private String journalenhet;
     private String arkivdel;
@@ -25,4 +29,10 @@ public class CaseProperties {
     private String saksmappeType;
 
     public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
+
+    @Data
+    public static class Title {
+        private String cases, records, documents;
+    }
+
 }

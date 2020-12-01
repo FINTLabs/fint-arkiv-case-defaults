@@ -2,15 +2,20 @@ package no.fint.arkiv
 
 import no.fint.model.felles.kompleksedatatyper.Identifikator
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.fint.model.resource.arkiv.noark.JournalpostResource
 import spock.lang.Specification
 
 class TitleServiceSpec extends Specification {
     TitleService titleService
+    CaseProperties.Title title
 
     void setup() {
-        titleService = new TitleService(Mock(LinkResolver), new CustomFormats(title: [
-                'tilskuddfartoy': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}'
-        ]))
+        titleService = new TitleService(Mock(LinkResolver))
+        title = new CaseProperties.Title(
+                cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
+                records: '${kallesignal} - ${fartoyNavn}:',
+                documents: '${saksaar}/${sakssekvensnummer} --')
     }
 
     def "Format title from object"() {
@@ -23,7 +28,7 @@ class TitleServiceSpec extends Specification {
         )
 
         when:
-        def t = titleService.getTitle(r)
+        def t = titleService.getCaseTitle(title, r)
         println(t)
 
         then:
@@ -36,7 +41,7 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleService.parseTitle(r, t)
+        titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -50,7 +55,7 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        titleService.parseTitle(r, t)
+        titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -63,7 +68,7 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        def result = titleService.parseTitle(r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
         println(r)
 
         then:
@@ -73,63 +78,74 @@ class TitleServiceSpec extends Specification {
         r.soknadsnummer.identifikatorverdi == '14812'
     }
 
-    def "No format defined returns null unless fatal"() {
+    def 'Produce and parse case titles with a format containing {title}'() {
         given:
-        def service = new TitleService(Mock(LinkResolver),
-                new CustomFormats(
-                        fatal: false,
-                        title: [:]
-                ))
+        def myTitle = new CaseProperties.Title(
+                'cases': '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}: ${tittel}')
+        def r = new TilskuddFartoyResource(
+                soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
+                fartoyNavn: 'Hestmann',
+                kallesignal: 'XXYYZ',
+                kulturminneId: '22334455-1',
+                tittel: 'Hei og hallo'
+        )
 
         when:
-        def title = service.getTitle(new TilskuddFartoyResource())
+        def t = titleService.getCaseTitle(myTitle, r)
 
         then:
-        noExceptionThrown()
-        title == null
+        t == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345: Hei og hallo'
+
+        when:
+        r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+        titleService.parseCaseTitle(myTitle, r, t)
+
+        then:
+        r.kallesignal == 'XXYYZ'
+        r.fartoyNavn == 'Hestmann'
+        r.soknadsnummer.identifikatorverdi == '12345'
+        r.kulturminneId == '22334455-1'
+        r.tittel == 'Hei og hallo'
+
     }
 
-    def "Parsing when no format defined returns true unless fatal"() {
+    def 'Format All Titles'() {
         given:
-        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
-                fatal: false,
-                title: [:]
-        ))
+        def r = new TilskuddFartoyResource(
+                soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
+                saksaar: '2020',
+                sakssekvensnummer: '12',
+                fartoyNavn: 'Hestmann',
+                kallesignal: 'XXYYZ',
+                kulturminneId: '22334455-1',
+                tittel: 'Hei og hallo',
+                journalpost: [
+                        new JournalpostResource(
+                                tittel: 'Vedtak om tilskudd',
+                                journalPostnummer: 14,
+                                dokumentbeskrivelse: [
+                                        new DokumentbeskrivelseResource(
+                                                tittel: 'Vedtaksbrev'
+                                        )
+                                ]
+                        )
+                ]
+        )
 
         when:
-        def result = service.parseTitle(new TilskuddFartoyResource(), 'Hello there')
+        def sak = titleService.getCaseTitle(title, r)
+        def journalpost = r.journalpost.collect { titleService.getRecordTitlePrefix(title, r) + it.tittel }
+        def dokument = r.journalpost.collect {
+            j ->
+                j.dokumentbeskrivelse.collect {
+                    titleService.getDocumentTitlePrefix(title, r) + it.tittel
+                }
+        }.flatten()
 
         then:
-        result
-    }
-
-    def 'No format defined throws exception if fatal'() {
-        given:
-        def service = new TitleService(Mock(LinkResolver),
-                new CustomFormats(
-                        fatal: true,
-                        title: [:]
-                ))
-
-        when:
-        service.getTitle(new TilskuddFartoyResource())
-
-        then:
-        thrown(IllegalArgumentException)
-    }
-
-    def 'Parsing when no format defined returns false if fatal'() {
-        given:
-        def service = new TitleService(Mock(LinkResolver), new CustomFormats(
-                fatal: true,
-                title: [:]
-        ))
-
-        when:
-        def result = service.parseTitle(new TilskuddFartoyResource(), 'Hello there')
-
-        then:
-        !result
+        sak == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
+        journalpost.every { it == 'XXYYZ - Hestmann: Vedtak om tilskudd' }
+        dokument.every { it == '2020/12 -- Vedtaksbrev' }
     }
 
     def 'Return false if title does not match pattern'() {
@@ -138,7 +154,7 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        def result = titleService.parseTitle(r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
 
         then:
         !result
@@ -150,7 +166,7 @@ class TitleServiceSpec extends Specification {
         def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
 
         when:
-        def result = titleService.parseTitle(r, t)
+        def result = titleService.parseCaseTitle(title, r, t)
 
         then:
         result

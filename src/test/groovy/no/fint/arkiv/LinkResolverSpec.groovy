@@ -1,6 +1,5 @@
 package no.fint.arkiv
 
-
 import no.fint.model.resource.Link
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
 import no.fint.model.resource.felles.kodeverk.FylkeResource
@@ -13,9 +12,8 @@ class LinkResolverSpec extends Specification {
     def 'Test default resolution of List<Link> attributes'() {
         given:
         def resolver = Mock(LinkResolver)
-        def titleService = new TitleService(resolver, new CustomFormats(title: [
-                'tilskuddfredabygningprivateie': '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}'
-        ]))
+        def title = new CaseProperties.Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}')
+        def titleService = new TitleService(resolver)
         def r = new TilskuddFredaBygningPrivatEieResource(
                 matrikkelnummer: new MatrikkelnummerResource(
                         gardsnummer: '1234',
@@ -28,12 +26,12 @@ class LinkResolverSpec extends Specification {
         r.matrikkelnummer.addKommunenummer(Link.with('https://api.felleskomponent.no/felles/kodeverk/kommune/systemid/3005'))
 
         when:
-        def title = titleService.getTitle(r)
+        def result = titleService.getCaseTitle(title, r)
 
         then:
-        title == 'Villa Panderosa – 1234/56 – Tilskudd – Drammen, Viken – 223344-5'
+        result == 'Villa Panderosa – 1234/56 – Tilskudd – Drammen, Viken – 223344-5'
         noExceptionThrown()
-        2 * resolver.resolve({it.href.contains('/kommune/')}) >> new KommuneResource(
+        2 * resolver.resolve({ it.href.contains('/kommune/') }) >> new KommuneResource(
                 kode: '3005',
                 navn: 'Drammen',
                 links: [
@@ -42,7 +40,7 @@ class LinkResolverSpec extends Specification {
                         ]
                 ]
         )
-        1 * resolver.resolve({it.href.contains('/fylke/')}) >> new FylkeResource(
+        1 * resolver.resolve({ it.href.contains('/fylke/') }) >> new FylkeResource(
                 kode: '30',
                 navn: 'Viken'
         )

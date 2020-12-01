@@ -1,6 +1,7 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,39 +19,38 @@ import java.util.regex.Pattern;
 public class TitleService {
 
     private final LinkResolver resolver;
-    private final Map<String, String> titles;
-    private final boolean fatal;
 
-    public TitleService(LinkResolver resolver, CustomFormats formats) {
+    public TitleService(LinkResolver resolver) {
         this.resolver = resolver;
-        this.titles = formats.getTitle();
-        this.fatal = formats.isFatal();
     }
 
-    public <T> String getTitle(T object) {
-        String type = resourceName(object);
-        if (fatal && !titles.containsKey(type)) {
-            throw new IllegalArgumentException("No format defined for " + type);
-        }
-        String title = new StringSubstitutor(new BeanPropertyLookup<>(resolver, object)).replace(titles.get(type));
-        log.debug("Title: '{}'", title);
-        return title;
+    public <T extends SaksmappeResource> String getCaseTitle(CaseProperties.Title title, T saksmappe) {
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getCases());
+        log.debug("Title: '{}'", result);
+        return result;
     }
 
-    public static String resourceName(Object object) {
-        return StringUtils.removeEnd(StringUtils.lowerCase(object.getClass().getSimpleName()), "resource");
+    public <T extends SaksmappeResource> String getRecordTitlePrefix(CaseProperties.Title title, T saksmappe) {
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getRecords());
+        log.debug("{} - Record title: '{}'", resourceName(saksmappe), result);
+        return result == null ? "" : result + " ";
     }
 
-    public boolean parseTitle(Object object, String title) {
-        if (titles == null) {
-            log.debug("No formats defined!");
-            return !fatal;
+    public <T extends SaksmappeResource> String getDocumentTitlePrefix(CaseProperties.Title title, T saksmappe) {
+        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getDocuments());
+        log.debug("{} - Document title: '{}'", resourceName(saksmappe), result);
+        return result == null ? "" : result + " ";
+    }
+
+    public boolean parseCaseTitle(CaseProperties.Title title, SaksmappeResource saksmappe, String input) {
+        if (title == null || StringUtils.isBlank(title.getCases())) {
+            log.debug("No case title format defined");
+            return false;
         }
-        String format = titles.get(resourceName(object));
-        if (StringUtils.isBlank(format)) {
-            log.debug("No format defined for {}", resourceName(object));
-            return !fatal;
-        }
+        return parseTitle(saksmappe, input, title.getCases());
+    }
+
+    private boolean parseTitle(Object object, String title, String format) {
         Pattern names = Pattern.compile("\\$\\{([^}]+)}");
         Matcher nameMatcher = names.matcher(format);
         List<String> nameList = new ArrayList<>();
@@ -68,12 +67,16 @@ public class TitleService {
                 try {
                     log.debug("Setting property {} to {}", nameList.get(i - 1), titleMatcher.group(i));
                     BeanUtils.setProperty(object, nameList.get(i - 1), titleMatcher.group(i));
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                } catch (IllegalAccessException | InvocationTargetException ignore) {
+                    log.debug("Unable to set property {}", nameList.get(i - 1));
                 }
             }
             return true;
         }
         return false;
+    }
+
+    public static String resourceName(Object object) {
+        return StringUtils.removeEnd(StringUtils.lowerCase(object.getClass().getSimpleName()), "resource");
     }
 }

@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,26 +20,14 @@ import java.util.stream.Stream;
 @Slf4j
 public class AdditionalFieldService {
     private final LinkResolver resolver;
-    private final Map<String, Map<String, String>> fieldFormats;
 
-    public AdditionalFieldService(LinkResolver resolver, CustomFormats customFormats) {
+    public AdditionalFieldService(LinkResolver resolver) {
         this.resolver = resolver;
-        this.fieldFormats = customFormats.getField();
     }
 
-    @PostConstruct
-    public void init() {
-        log.debug("Custom Fields: {}", fieldFormats);
-    }
-
-    public <T> Stream<Field> getFieldsForResource(T resource) {
-        if (fieldFormats == null) {
-            return Stream.empty();
-        }
-        String type = TitleService.resourceName(resource);
-        Map<String, String> fields = fieldFormats.get(type);
+    public <T> Stream<Field> getFieldsForResource(Map<String, String> fields, T resource) {
         if (fields == null) {
-            log.warn("No custom fields for {}", type);
+            log.warn("No custom fields for {}", resource.getClass());
             return Stream.empty();
         }
         final StringSubstitutor substitutor = new StringSubstitutor(new BeanPropertyLookup<>(resolver, resource));
@@ -49,11 +36,7 @@ public class AdditionalFieldService {
                         substitutor.replace(e.getValue())));
     }
 
-    public <U> void setFieldsForResource(U resource, List<Field> fields) {
-        if (fieldFormats == null || fields == null || fields.isEmpty()) {
-            return;
-        }
-        Map<String, String> fieldMap = fieldFormats.get(TitleService.resourceName(resource));
+    public <U> void setFieldsForResource(Map<String, String> fieldMap, U resource, List<Field> fields) {
         if (fieldMap == null) {
             return;
         }

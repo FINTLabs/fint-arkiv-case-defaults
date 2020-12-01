@@ -13,6 +13,8 @@ applied by the adapter if these values have not been set by the client.
 
 ### Properties for each case type
 
+- `title` (see below)
+- `field` (see below)
 - `administrativEnhet`
 - `journalenhet`
 - `arkivdel`
@@ -28,8 +30,10 @@ applied by the adapter if these values have not been set by the client.
 - `dokumentstatus`
 - `dokumentType`
 - `tilknyttetRegistreringSom`
+- `skjermingskontekst`
 - `tilgangsrestriksjon`
 - `skjermingshjemmel`
+- `saksmappeType`
 
 ### How to implement in adapter
 
@@ -39,11 +43,26 @@ applied by the adapter if these values have not been set by the client.
 
 ## TitleService
 
-This service is used to set the format for cases based on case properties.  
-It is bidirectional, meaning case properties can also be parsed and applied from the title.
+This service formats titles for cases for different case types based on case properties, as well as title prefixes
+for records and documents.  
+It is bidirectional, meaning case properties can be parsed and applied from the title.
 
-This is controlled by the property `fint.case.formats.title.<casetype>`.  Properties in the `${name}` 
-format will be evaluated and parsed. 
+This is controlled by the following properties:
+- `fint.case.defaults.<casetype>.title.cases`
+- `fint.case.defaults.<casetype>.title.records`
+- `fint.case.defaults.<casetype>.title.documents`
+ 
+Properties in the `${name}` format will be evaluated and parsed.
+
+### How to implement in adapter
+
+1. Add `compile('no.fint:fint-arkiv-case-defaults:+')` to `build.gradle`
+2. `@Autowired TitleService` in case mapping code.
+3. Writing: 
+   - Invoke `getCaseTitle()` on `TitleMapper` to create case title.
+   - Invoke `getRecordTitlePrefix()` and `getDocumentTitlePrefix()` to obtain prefixes for records and documents. 
+4. Reading: Invoke `parseCaseTitle()` on `TitleMapper` to apply case properties from the case title.
+   - This method returns `true` if the case title matched the expected pattern.
 
 ### Example
 `Løyve drosje - ${tittel} - ${organisasjonsnummer}`
@@ -54,10 +73,10 @@ gives
 
 ## AdditionalFieldService
 
-This service is used to apply custom attributes (additional fields) in the system specific objects
+Use this service to apply custom attributes (additional fields) in the system specific objects
 to / from case attributes.
 
-This is controlled by properties of the format `fint.case.formats.field.<casetype>.<customField>` where
+This is controlled by properties of the format `fint.case.defaults.<casetype>.field.<customField>` where
 the property value is in `${name}` format.
 
 This is also bidirectional, meaning custom fields are parsed and applied to case attributes.

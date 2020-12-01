@@ -9,6 +9,7 @@ import org.apache.commons.text.lookup.StringLookup;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 public class BeanPropertyLookup<T> implements StringLookup {
@@ -53,11 +54,7 @@ public class BeanPropertyLookup<T> implements StringLookup {
                 throw new IllegalArgumentException(linkProperty + " does not resolve to a Link");
             }
         }
-        final Object value = PropertyUtils.getProperty(target, key);
-        if (value == null) {
-            return "";
-        }
-        return value.toString();
+        return Objects.toString(PropertyUtils.getProperty(target, key), "");
     }
 
 }
