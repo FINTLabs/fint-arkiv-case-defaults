@@ -11,7 +11,8 @@ class TitleServiceSpec extends Specification {
     CaseProperties.Title title
 
     void setup() {
-        titleService = new TitleService(Mock(LinkResolver))
+        def substitutorService = new SubstitutorService(Mock(LinkResolver))
+        titleService = new TitleService(substitutorService)
         title = new CaseProperties.Title(
                 cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
                 records: '${kallesignal} - ${fartoyNavn}:',
