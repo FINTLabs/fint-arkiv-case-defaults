@@ -28,19 +28,19 @@ class ClassificationSpec extends Specification {
         def p = new CaseProperties(
                 klassifikasjon: [
                         1: new CaseProperties.Klasse(
-                                setOrdning: 'EMNE',
+                                ordning: 'EMNE',
                                 verdi: '223'
                         ),
                         2: new CaseProperties.Klasse(
-                                setOrdning: 'EMNE',
+                                ordning: 'EMNE',
                                 verdi: 'C50'
                         ),
                         3: new CaseProperties.Klasse(
-                                setOrdning: 'EMNE',
+                                ordning: 'EMNE',
                                 verdi: 'C53'
                         ),
                         4: new CaseProperties.Klasse(
-                                setOrdning: 'GBNR',
+                                ordning: 'GBNR',
                                 verdi: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}'
                         )
                 ]
