@@ -27,13 +27,21 @@ class ClassificationSpec extends Specification {
         )
         def p = new CaseProperties(
                 klassifikasjon: [
-                        'EMNE': new CaseProperties.Klasse(
-                                rekkefolge: 1,
-                                verdi: ['223', 'C50', 'C53']
+                        1: new CaseProperties.Klasse(
+                                setOrdning: 'EMNE',
+                                verdi: '223'
                         ),
-                        'GBNR': new CaseProperties.Klasse(
-                                rekkefolge: 2,
-                                verdi: ['${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}']
+                        2: new CaseProperties.Klasse(
+                                setOrdning: 'EMNE',
+                                verdi: 'C50'
+                        ),
+                        3: new CaseProperties.Klasse(
+                                setOrdning: 'EMNE',
+                                verdi: 'C53'
+                        ),
+                        4: new CaseProperties.Klasse(
+                                setOrdning: 'GBNR',
+                                verdi: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}'
                         )
                 ]
         )
@@ -45,7 +53,6 @@ class ClassificationSpec extends Specification {
         then:
         !r.klasse.isEmpty()
         r.klasse.size() == 4
-        r.klasse.findAll {it.rekkefolge == 2 }.every {it.tittel == '112/34' }
-        r.klasse.findAll {it.rekkefolge == 1 }.collect().size() == 3
+        r.klasse.any { it.tittel == '112/34' }
     }
 }

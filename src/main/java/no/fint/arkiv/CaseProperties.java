@@ -13,7 +13,7 @@ public class CaseProperties {
     private String arkivdel;
     private String saksansvarlig;
     private String[] noekkelord;
-    private Map<String,Klasse> klassifikasjon;
+    private Map<Integer,Klasse> klassifikasjon;
     private String saksstatus;
     private String korrespondansepartType;
     private String journalpostType;
@@ -36,8 +36,8 @@ public class CaseProperties {
 
     @Data
     public static class Klasse {
-        private int rekkefolge;
-        private String[] verdi;
+        private String ordning;
+        private String verdi;
     }
 
 }

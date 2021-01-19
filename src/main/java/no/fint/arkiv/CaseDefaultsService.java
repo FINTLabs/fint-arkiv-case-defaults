@@ -71,19 +71,16 @@ public abstract class CaseDefaultsService {
             final StringSubstitutor substitutor = substitutorService.getSubstitutorForResource(resource);
             resource.setKlasse(
                     properties.getKlassifikasjon().entrySet().stream()
-                            .flatMap(e -> {
-                                final String klassifikasjon = e.getKey();
-                                final int rekkefolge = e.getValue().getRekkefolge();
-                                return Arrays.stream(e.getValue().getVerdi())
-                                        .map(substitutor::replace)
-                                        .map(klasse -> {
-                                            KlasseResource result = new KlasseResource();
-                                            result.setRekkefolge(rekkefolge);
-                                            result.setKlasseId(klasse);
-                                            result.setTittel(klasse);
-                                            result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
-                                            return result;
-                                        });
+                            .map(e -> {
+                                final String klassifikasjon = e.getValue().getOrdning();
+                                final int rekkefolge = e.getKey();
+                                final String klasse = substitutor.replace(e.getValue().getVerdi());
+                                KlasseResource result = new KlasseResource();
+                                result.setRekkefolge(rekkefolge);
+                                result.setKlasseId(klasse);
+                                result.setTittel(klasse);
+                                result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
+                                return result;
                             })
                             .collect(Collectors.toList()));
         }
