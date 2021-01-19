@@ -13,15 +13,14 @@ applied by the adapter if these values have not been set by the client.
 
 ### Properties for each case type
 
-- `title` (see below)
-- `field` (see below)
+- `title` (see _TitleService_ below)
+- `field` (see _AdditionalFieldService_ below)
 - `administrativEnhet`
 - `journalenhet`
 - `arkivdel`
 - `saksansvarlig`
 - `noekkelord`
-- `klassifikasjon`
-- `klasse`
+- `klassifikasjon` (see _Classifications_ below)
 - `saksstatus`
 - `korrespondansepartType`
 - `journalpostType`
@@ -80,6 +79,18 @@ This is controlled by properties of the format `fint.case.defaults.<casetype>.fi
 the property value is in `${name}` format.
 
 This is also bidirectional, meaning custom fields are parsed and applied to case attributes.
+
+## Classifications
+
+Classifications are controlled by the following sets of properties:
+
+- `fint.case.defaults.<casetype>.klassifikasjon.<KEY>.rekkefolge`
+- `fint.case.defaults.<casetype>.klassifikasjon.<KEY>.verdi`
+
+Where `<KEY>` is the ID of the `Klassifikasjonssystem` the classifications is within.
+The `rekkefolge` setting determines sorting order - `1` for primary classification, `2` for secondary classification.
+`verdi` is a comma separated list of classification values.  These support the same `${}` interpolation values as 
+titles and additional fields referred above.
 
 # Metadata Coding System Mapping
 
