@@ -36,8 +36,7 @@ public class CaseProperties {
 
     @Data
     public static class Klasse {
-        private String ordning;
-        private String verdi;
+        private String ordning, verdi, tittel;
     }
 
 }

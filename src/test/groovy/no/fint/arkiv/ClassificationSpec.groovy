@@ -41,7 +41,8 @@ class ClassificationSpec extends Specification {
                         ),
                         4: new CaseProperties.Klasse(
                                 ordning: 'GBNR',
-                                verdi: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}'
+                                verdi: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}',
+                                tittel: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} ${bygningsnavn}'
                         )
                 ]
         )
@@ -53,6 +54,6 @@ class ClassificationSpec extends Specification {
         then:
         !r.klasse.isEmpty()
         r.klasse.size() == 4
-        r.klasse.any { it.tittel == '112/34' }
+        r.klasse.any { it.klasseId == '112/34' && it.tittel == '112/34 Kråkeslottet' }
     }
 }

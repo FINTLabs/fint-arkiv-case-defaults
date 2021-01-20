@@ -75,10 +75,11 @@ public abstract class CaseDefaultsService {
                                 final String klassifikasjon = e.getValue().getOrdning();
                                 final int rekkefolge = e.getKey();
                                 final String klasse = substitutor.replace(e.getValue().getVerdi());
+                                final String tittel = substitutor.replace(e.getValue().getTittel());
                                 KlasseResource result = new KlasseResource();
                                 result.setRekkefolge(rekkefolge);
                                 result.setKlasseId(klasse);
-                                result.setTittel(klasse);
+                                result.setTittel(tittel);
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             })
