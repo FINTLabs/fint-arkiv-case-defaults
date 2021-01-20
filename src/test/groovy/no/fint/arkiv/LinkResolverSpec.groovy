@@ -1,7 +1,12 @@
 package no.fint.arkiv
 
+
 import no.fint.model.resource.Link
+import no.fint.model.resource.arkiv.kodeverk.RolleResource
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
+import no.fint.model.resource.arkiv.noark.ArkivressursResource
+import no.fint.model.resource.arkiv.noark.SakResource
+import no.fint.model.resource.arkiv.noark.TilgangResource
 import no.fint.model.resource.felles.kodeverk.FylkeResource
 import no.fint.model.resource.felles.kodeverk.KommuneResource
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
@@ -45,5 +50,27 @@ class LinkResolverSpec extends Specification {
                 kode: '30',
                 navn: 'Viken'
         )
+    }
+
+    def 'Test nested link resolution'() {
+        given:
+        def resolver = Mock(LinkResolver)
+        def subsitutorservice = new SubstitutorService(resolver)
+        def sak = new SakResource()
+        sak.addSaksansvarlig(Link.with(ArkivressursResource, 'systemid', 'abc'))
+        def arkivressurs = new ArkivressursResource()
+        arkivressurs.addTilgang(Link.with(TilgangResource, 'systemid', 'bcd'))
+        def tilgang = new TilgangResource()
+        tilgang.addRolle(Link.with(RolleResource, 'systemid', 'cde'))
+        def rolle = new RolleResource(navn: 'TestRolle')
+
+        when:
+        def result = subsitutorservice.getSubstitutorForResource(sak).replace('${link:saksansvarlig#link:tilgang#link:rolle#navn}')
+
+        then:
+        result == 'TestRolle'
+        1 * resolver.resolve({ it.href.contains('arkivressurs') }) >> arkivressurs
+        1 * resolver.resolve({ it.href.contains('tilgang') }) >> tilgang
+        1 * resolver.resolve({ it.href.contains('rolle') }) >> rolle
     }
 }

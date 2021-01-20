@@ -40,6 +40,30 @@ applied by the adapter if these values have not been set by the client.
 2. Extend `CaseDefaultsService` with adapter-specific features
 3. Invoke the extended service in the handlers
 
+## Property expansion using Apache Commons Beanutils
+
+In the sections below, the pattern `${name}` indicates that the strings support parameter substitution with the help
+of `org.apache.commons.beanutils.PropertyUtils.getProperty()`.  Unfortunately, the project's Javadoc does not provide
+concrete examples of usage, but have a look at https://www.baeldung.com/apache-commons-beanutils for some examples.
+
+### Resolving links to other resources
+
+The property lookup also supports following links to other resources, so information can be retrieved from the target
+of these links.
+
+Projects using this library must have a `@Service` which implements `LinkResolver` for this to work.
+
+The syntax for this linked property is as follows:
+
+- `${link:name.of.link.property#name.of.property.in.target}`
+
+This can be done in a nested manner, where the right-hand side of `#` contains another `link:xxx#yyy` expression.
+
+Examples:
+- On `Saksmappe`, `${link:arkivdel#tittel}` would resolve to the `tittel` attribute of the `Arkivdel` resource linked.
+- On `Saksmappe`, `${link:saksansvarlig#link:tilgang#link:rolle#navn}` would resolve to the role name of the responsible
+  person, following the links from `Saksmappe` via `Arkivressurs` and `Tilgang` to `Rolle`.
+
 ## TitleService
 
 This service formats titles for cases for different case types based on case properties, as well as title prefixes
@@ -76,7 +100,7 @@ Use this service to apply custom attributes (additional fields) in the system sp
 to / from case attributes.
 
 This is controlled by properties of the format `fint.case.defaults.<casetype>.field.<customField>` where
-the property value is in `${name}` format.
+the property value is in `${name}` format.  
 
 This is also bidirectional, meaning custom fields are parsed and applied to case attributes.
 
@@ -86,11 +110,12 @@ Classifications are controlled by the following sets of properties:
 
 - `fint.case.defaults.<casetype>.klassifikasjon.<KEY>.ordning`
 - `fint.case.defaults.<casetype>.klassifikasjon.<KEY>.verdi`
+- `fint.case.defaults.<casetype>.klassifikasjon.<KEY>.tittel`
 
 Where `<KEY>` determines sorting order - `1` for primary classification, `2` for secondary classification, etc.
 `ordning` is the ID of the `Klassifikasjonssystem` the classifications is within. 
-`verdi` is the classification value.  This support the same `${}` interpolation values as titles and additional fields
-referred above.
+`verdi` is the classification value, and `tittel` the classification title (or description).  These support the same
+`${name}` interpolation values as titles and additional fields referred above.
 
 # Metadata Coding System Mapping
 
@@ -118,7 +143,7 @@ The metadata attributes supported are:
 - `gradering`
 - `variantformat`
 
-(Note that the ones marked (*) are not yet supported)
+(Note that the ones marked (*) are not yet implemented)
 
 The defined codes can be found in [noark-metadata.json](src/main/resources/noark-metadata.json).
 
