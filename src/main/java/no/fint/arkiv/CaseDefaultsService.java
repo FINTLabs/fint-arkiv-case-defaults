@@ -79,7 +79,9 @@ public abstract class CaseDefaultsService {
                                 KlasseResource result = new KlasseResource();
                                 result.setRekkefolge(rekkefolge);
                                 result.setKlasseId(klasse);
-                                result.setTittel(tittel);
+                                result.setTittel(isNotBlank(tittel)
+                                        ? tittel
+                                        : klasse);
                                 result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", klassifikasjon));
                                 return result;
                             })
