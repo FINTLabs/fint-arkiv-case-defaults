@@ -172,4 +172,29 @@ class TitleServiceSpec extends Specification {
         then:
         result
     }
+
+    def 'Expression language test'() {
+        given:
+        def title = new CaseProperties.Title(
+                cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
+                records: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}',
+                documents: '${saksaar}/${sakssekvensnummer} --')
+
+        def r = new TilskuddFartoyResource(
+                soknadsnummer: new Identifikator(identifikatorverdi: '12345'),
+                fartoyNavn: 'Hestmann',
+                kallesignal: 'XXYYZ',
+                kulturminneId: '22334455-1',
+                tittel: 'Karmøy – 167/1630 – Kråkeslottet – 86010-1 - Tilskudd Kapittel 1429 post 71 og dispensasjoner'
+        )
+
+        when:
+        def result = titleService.getRecordTitlePrefix(title, r)
+        print('"' + result + '"')
+
+        then:
+        noExceptionThrown()
+        result =~ /^Karmøy/
+        result =~ /86010-1 - /
+    }
 }
