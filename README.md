@@ -10,6 +10,7 @@ applied by the adapter if these values have not been set by the client.
 - `tilskuddfartoy`
 - `tilskuddfredabygningprivateie`
 - `personalmappe`
+- `dropsjeloyve`
 
 ### Properties for each case type
 
@@ -38,7 +39,8 @@ applied by the adapter if these values have not been set by the client.
 
 1. Add `compile('no.fint:fint-arkiv-case-defaults:+')` to `build.gradle`
 2. Extend `CaseDefaultsService` with adapter-specific features
-3. Invoke the extended service in the handlers
+3. Add a `@Service` which implements `LinkResolver`
+4. Invoke the extended service in the handlers
 
 ## Property expansion using Apache Commons Beanutils
 
@@ -93,6 +95,12 @@ Properties in the `${name}` format will be evaluated and parsed.
 gives
 
 `Løyve drosje - Centro Taxi AS - 222333444`
+
+### Formatting titles using Spring Expression Language (SpEL)
+
+As an alternative to the `${name}` format, titles can also be formatted using `#{expression}` statements.
+See https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions-language-ref for
+a language reference.
 
 ## AdditionalFieldService
 
