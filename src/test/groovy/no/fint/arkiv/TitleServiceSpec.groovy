@@ -176,7 +176,7 @@ class TitleServiceSpec extends Specification {
     def 'Expression language test'() {
         given:
         def title = new CaseProperties.Title(
-                cases: '${kallesignal} - ${fartoyNavn} - Tilskudd - ${kulturminneId} - ${soknadsnummer.identifikatorverdi}',
+                cases: '#{kallesignal} - #{fartoyNavn} - Tilskudd - #{kulturminneId} - #{soknadsnummer.identifikatorverdi}',
                 records: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}',
                 documents: '${saksaar}/${sakssekvensnummer} --')
 
@@ -196,5 +196,12 @@ class TitleServiceSpec extends Specification {
         noExceptionThrown()
         result =~ /^Karmøy/
         result =~ /86010-1 - /
+
+        when:
+        result = titleService.getCaseTitle(title, r)
+        print('"' + result + '"')
+
+        then:
+        result == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
     }
 }
