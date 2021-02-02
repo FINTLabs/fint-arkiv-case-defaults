@@ -5,7 +5,8 @@ import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringSubstitutor;
+import org.springframework.expression.ParserContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,28 +19,28 @@ import java.util.regex.Pattern;
 @Slf4j
 public class TitleService {
 
-    private final LinkResolver resolver;
+    private final SubstitutorService substitutorService;
 
-    public TitleService(LinkResolver resolver) {
-        this.resolver = resolver;
+    public TitleService(SubstitutorService substitutorService) {
+        this.substitutorService = substitutorService;
     }
 
     public <T extends SaksmappeResource> String getCaseTitle(CaseProperties.Title title, T saksmappe) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getCases());
+        String result = evaluateExpression(saksmappe, title.getCases());
         log.debug("Title: '{}'", result);
         return result;
     }
 
     public <T extends SaksmappeResource> String getRecordTitlePrefix(CaseProperties.Title title, T saksmappe) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getRecords());
+        String result = evaluateExpression(saksmappe, title.getRecords());
         log.debug("{} - Record title: '{}'", resourceName(saksmappe), result);
-        return result == null ? "" : result + " ";
+        return prefixFormat(result);
     }
 
     public <T extends SaksmappeResource> String getDocumentTitlePrefix(CaseProperties.Title title, T saksmappe) {
-        String result = new StringSubstitutor(new BeanPropertyLookup<>(resolver, saksmappe)).replace(title.getDocuments());
+        String result = evaluateExpression(saksmappe, title.getDocuments());
         log.debug("{} - Document title: '{}'", resourceName(saksmappe), result);
-        return result == null ? "" : result + " ";
+        return prefixFormat(result);
     }
 
     public boolean parseCaseTitle(CaseProperties.Title title, SaksmappeResource saksmappe, String input) {
@@ -79,4 +80,22 @@ public class TitleService {
     public static String resourceName(Object object) {
         return StringUtils.removeEnd(StringUtils.lowerCase(object.getClass().getSimpleName()), "resource");
     }
+
+    private <T extends SaksmappeResource> String evaluateExpression(T saksmappe, String format) {
+        if (StringUtils.contains(format, "#{")) {
+            return new SpelExpressionParser().parseExpression(format, ParserContext.TEMPLATE_EXPRESSION).getValue(saksmappe, String.class);
+        }
+        return substitutorService.getSubstitutorForResource(saksmappe).replace(format);
+    }
+
+    private String prefixFormat(String result) {
+        if (result == null) {
+            return "";
+        }
+        if (result.endsWith(" ")) {
+            return result;
+        }
+        return result + " ";
+    }
+
 }
