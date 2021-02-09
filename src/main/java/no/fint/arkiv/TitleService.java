@@ -60,7 +60,7 @@ public class TitleService {
         }
         log.debug("nameList = {}", nameList);
 
-        String pattern = RegExUtils.replaceAll(format, names, "(.+)");
+        String pattern = RegExUtils.replaceAll(format, names, "(.*)");
         Pattern titlePattern = Pattern.compile("^" + pattern + "$");
         Matcher titleMatcher = titlePattern.matcher(title);
         if (titleMatcher.matches()) {

@@ -173,6 +173,20 @@ class TitleServiceSpec extends Specification {
         result
     }
 
+    def 'Return true if title with empty values matches pattern'() {
+        given:
+        def t = 'LDQT -  - Tilskudd - 139136-1 - '
+        def r = new TilskuddFartoyResource(soknadsnummer: new Identifikator())
+
+        when:
+        def result = titleService.parseCaseTitle(title, r, t)
+
+        then:
+        result
+        r.kallesignal == 'LDQT'
+        r.kulturminneId == '139136-1'
+    }
+
     def 'Expression language test'() {
         given:
         def title = new CaseProperties.Title(
