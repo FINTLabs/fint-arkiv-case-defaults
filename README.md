@@ -10,7 +10,7 @@ applied by the adapter if these values have not been set by the client.
 - `tilskuddfartoy`
 - `tilskuddfredabygningprivateie`
 - `personalmappe`
-- `dropsjeloyve`
+- `soknaddrosjeloyve`
 
 ### Properties for each case type
 
