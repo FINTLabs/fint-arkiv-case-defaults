@@ -102,6 +102,8 @@ As an alternative to the `${name}` format, titles can also be formatted using `#
 See https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions-language-ref for
 a language reference.
 
+Combining `${name}` and `#{expression}` statements in the same string results in undefined behavior.
+
 ## AdditionalFieldService
 
 Use this service to apply custom attributes (additional fields) in the system specific objects
