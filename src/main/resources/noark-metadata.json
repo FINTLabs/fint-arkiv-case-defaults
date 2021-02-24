@@ -202,5 +202,20 @@
       "A": "Arkivformat",
       "O": "Dokument hvor deler av innholdet er skjermet"
     }
+  },
+  {
+    "kode": "M701",
+    "navn": "format",
+    "obligatorisk": false,
+    "verdier": {
+      "RA-TEKST": "Ren tekst. UTF-8 (ISO/IEC 10646-1:2000 Annex D) eller ISO 8859-1:1998, Latin 1. ISO 8859-1:1998, Latin 1 kan erstattes med ISO 8859-4:1998, Latin 4 for samiske tegn.",
+      "RA-TIFF6": "TIFF - Tag Image File Format versjon 6, med de presiseringer som fremgår av forskriftens § 8-18",
+      "RA-PDF": "PDF/A - ISO 19005-1:2005, versjon 1a eller 1b («Conformance Level» A eller B). PDF/A erstatter Adobe PDF, jf. forskriftens § 8-20 tredje ledd.",
+      "RA-XML": "XML - Extensible Markup Language versjon 1.0, med de presiseringer som fremgår av forskriftens § 8-19",
+      "RA-JPEG": "JPEG (ISO 10918-1:1994)",
+      "RA-SOSI": "SOSI versjon 2.2 (1995) eller nyere",
+      "RA-MPEG-2": "MPEG-2 (ISO 13818-2.)",
+      "RA-MP3": "MP3 (ISO 11172-3), PCM eller PCM-basert Wave. Valget mellom disse lydformatene skal i hvert tilfelle være avtalt med Arkivverket før deponering eller avlevering"
+    }
   }
 ]
