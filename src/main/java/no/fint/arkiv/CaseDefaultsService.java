@@ -127,6 +127,8 @@ public abstract class CaseDefaultsService {
         defaultDate(journalpost::getOpprettetDato, journalpost::setOpprettetDato);
         defaultDate(journalpost::getDokumentetsDato, journalpost::setDokumentetsDato);
         defaultDate(journalpost::getJournalDato, journalpost::setJournalDato);
+        defaultDate(journalpost::getMottattDato, journalpost::setMottattDato);
+        defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
 
         codingSystemService.mapCodingSystemLinks(journalpost);
         journalpost.getKorrespondansepart().forEach(korrespondanse -> {
@@ -140,8 +142,6 @@ public abstract class CaseDefaultsService {
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
-            defaultDate(journalpost::getMottattDato, journalpost::setMottattDato);
-            defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
             journalpost.addJournalposttype(Link.with(
                     JournalpostType.class,
                     "systemid",
