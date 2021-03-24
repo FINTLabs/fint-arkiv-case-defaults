@@ -29,6 +29,8 @@ applied by the adapter if these values have not been set by the client.
 - `saksbehandler`
 - `dokumentstatus`
 - `dokumentType`
+- `format`
+- `variantFormat`
 - `tilknyttetRegistreringSom`
 - `skjermingskontekst`
 - `tilgangsrestriksjon`
@@ -151,7 +153,8 @@ The metadata attributes supported are:
 - `skjermingMetadata` (*)
 - `skjermingDokument` (*)
 - `gradering`
-- `variantformat`
+- `format`  
+- `variantFormat`
 
 (Note that the ones marked (*) are not yet implemented)
 

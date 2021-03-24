@@ -13,7 +13,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "fint.case.coding")
 public class CodingSystemDefaults {
     private boolean fatal;
-    private Map<String,String>
+    private Map<String, String>
             saksstatus,
             journalstatus,
             dokumentstatus,
@@ -26,6 +26,7 @@ public class CodingSystemDefaults {
             skjermingMetadata,
             skjermingDokument,
             gradering,
+            format,
             variantFormat;
 
 }

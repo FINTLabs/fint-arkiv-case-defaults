@@ -21,6 +21,8 @@ public class CaseProperties {
     private String saksbehandler;
     private String dokumentstatus;
     private String dokumentType;
+    private String format;
+    private String variantFormat;
     private String tilknyttetRegistreringSom;
     private Skjermingskontekst[] skjermingskontekst;
     private String tilgangsrestriksjon;

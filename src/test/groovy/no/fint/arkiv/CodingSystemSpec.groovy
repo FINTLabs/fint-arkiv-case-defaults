@@ -26,17 +26,18 @@ class CodingSystemSpec extends Specification {
 
     def 'Verify all metadata streams are supported'() {
         expect:
-        noarkMetadataService.saksStatus.anyMatch {it.navn == 'Under behandling'}
-        noarkMetadataService.journalStatus.anyMatch {it.navn == 'Godkjent av leder'}
-        noarkMetadataService.dokumentStatus.anyMatch {it.navn == 'Dokumentet er ferdigstilt'}
-        noarkMetadataService.journalpostType.anyMatch {it.navn == 'Inngående dokument'}
-        noarkMetadataService.dokumentType.anyMatch {it.navn == 'Brev'}
-        noarkMetadataService.korrespondansepartType.anyMatch {it.navn == 'Intern avsender'}
-        noarkMetadataService.tilknyttetRegistreringSom.anyMatch {it.navn == 'Hoveddokument'}
-        noarkMetadataService.partRolle.anyMatch {it.navn == 'Klient'}
-        noarkMetadataService.variantformat.anyMatch {it.navn == 'Arkivformat'}
-        noarkMetadataService.tilgangsrestriksjon.anyMatch { it.navn == 'Unntatt etter offentleglova'}
-        noarkMetadataService.skjermingshjemmel.allMatch { it.navn.contains('§')}
+        noarkMetadataService.saksStatus.anyMatch { it.navn == 'Under behandling' }
+        noarkMetadataService.journalStatus.anyMatch { it.navn == 'Godkjent av leder' }
+        noarkMetadataService.dokumentStatus.anyMatch { it.navn == 'Dokumentet er ferdigstilt' }
+        noarkMetadataService.journalpostType.anyMatch { it.navn == 'Inngående dokument' }
+        noarkMetadataService.dokumentType.anyMatch { it.navn == 'Brev' }
+        noarkMetadataService.korrespondansepartType.anyMatch { it.navn == 'Intern avsender' }
+        noarkMetadataService.tilknyttetRegistreringSom.anyMatch { it.navn == 'Hoveddokument' }
+        noarkMetadataService.partRolle.anyMatch { it.navn == 'Klient' }
+        noarkMetadataService.format.anyMatch { it.navn.contains('PDF/A') }
+        noarkMetadataService.variantformat.anyMatch { it.navn == 'Arkivformat' }
+        noarkMetadataService.tilgangsrestriksjon.anyMatch { it.navn == 'Unntatt etter offentleglova' }
+        noarkMetadataService.skjermingshjemmel.allMatch { it.navn.contains('§') }
     }
 
     def "Able to get definition of metadata M082"() {
@@ -62,8 +63,8 @@ class CodingSystemSpec extends Specification {
         codingSystemService.mapCodingSystemLinks(korrespondansepart)
 
         then:
-        journalpost.getJournalstatus().every {it.href.endsWith('/42')}
-        journalpost.korrespondansepart.every {it.getKorrespondanseparttype().every {it.href.endsWith('/396')}}
+        journalpost.getJournalstatus().every { it.href.endsWith('/42') }
+        journalpost.korrespondansepart.every { it.getKorrespondanseparttype().every { it.href.endsWith('/396') } }
     }
 
     def 'Able to update Saksmappe code value links'() {
@@ -75,7 +76,7 @@ class CodingSystemSpec extends Specification {
         codingSystemService.mapCodingSystemLinks(saksmappe)
 
         then:
-        saksmappe.getSaksstatus().any {it.href.endsWith('/997')}
+        saksmappe.getSaksstatus().any { it.href.endsWith('/997') }
     }
 
     def 'Able to update Dokumentbeskrivelse code value links'() {
@@ -88,8 +89,8 @@ class CodingSystemSpec extends Specification {
         codingSystemService.mapCodingSystemLinks(dokument)
 
         then:
-        dokument.getDokumentstatus().any {it.href.endsWith('/12')}
-        dokument.getTilknyttetRegistreringSom().any {it.href.endsWith('/1')}
+        dokument.getDokumentstatus().any { it.href.endsWith('/12') }
+        dokument.getTilknyttetRegistreringSom().any { it.href.endsWith('/1') }
     }
 
 }

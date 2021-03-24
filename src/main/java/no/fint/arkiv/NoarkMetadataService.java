@@ -73,6 +73,11 @@ public class NoarkMetadataService {
                 .map(create(PartRolleResource::new));
     }
 
+    public Stream<FormatResource> getFormat() {
+        return getEntries("format")
+                .map(create(FormatResource::new));
+    }
+
     public Stream<VariantformatResource> getVariantformat() {
         return getEntries("variantFormat")
                 .map(create(VariantformatResource::new));
