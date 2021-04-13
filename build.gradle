@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.jfrog.bintray' version '1.8.4'
     id 'com.github.ben-manes.versions' version '0.27.0'
     id 'com.github.kt3k.coveralls' version '2.9.0'
 }
@@ -17,10 +16,14 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    maven {
+        url 'https://repo.fintlabs.no/releases'
+    }
     mavenLocal()
+    mavenCentral()
     jcenter()
     maven {
-        url 'http://dl.bintray.com/fint/maven'
+        url 'https://dl.bintray.com/fint/maven'
     }
 }
 
@@ -56,6 +59,26 @@ bootJar {
     enabled = false
 }
 
-if (project.hasProperty('bintrayUser') && project.hasProperty('bintrayKey')) {
-    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/v1.8.0/bintray.gradle'
+group 'no.fint'
+
+if (project.hasProperty('reposiliteUsername') && project.hasProperty('reposiliteToken')) {
+    publishing {
+        repositories {
+            maven {
+                url "https://repo.fintlabs.no/releases"
+                credentials {
+                    username = reposiliteUsername
+                    password = reposiliteToken
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
 }
