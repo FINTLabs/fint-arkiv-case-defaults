@@ -250,6 +250,13 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForDokumentobjekt(CaseProperties properties, DokumentobjektResource dokumentobjekt) {
+        if (isNotBlank(dokumentobjekt.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
+            dokumentobjekt.addFilformat(Link.with(
+                    Format.class,
+                    "systemid",
+                    dokumentobjekt.getFormat()
+            ));
+        }
         if (isNotBlank(properties.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
             dokumentobjekt.addFilformat(Link.with(
                     Format.class,
