@@ -19,6 +19,7 @@ public class CaseProperties {
     private String journalpostType;
     private String journalstatus;
     private String saksbehandler;
+    private String avskrivningsmaate;
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;
