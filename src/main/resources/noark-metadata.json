@@ -194,6 +194,18 @@
     }
   },
   {
+    "kode": "M619",
+    "navn": "avskrivningsmaate",
+    "obligatorisk": false,
+    "verdier": {
+      "BU": "Besvart med brev",
+      "BE": "Besvart med e-post",
+      "TLF": "Besvart på telefon",
+      "TE": "Tatt til etterretning",
+      "TO": "Tatt til orientering"
+    }
+  },
+  {
     "kode": "M700",
     "navn": "variantFormat",
     "obligatorisk": true,
