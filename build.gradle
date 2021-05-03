@@ -21,9 +21,6 @@ repositories {
     }
     mavenCentral()
     jcenter()
-    maven {
-        url 'https://dl.bintray.com/fint/maven'
-    }
     mavenLocal()
 }
 
@@ -59,26 +56,4 @@ bootJar {
     enabled = false
 }
 
-group 'no.fint'
-
-if (project.hasProperty('reposiliteUsername') && project.hasProperty('reposiliteToken')) {
-    publishing {
-        repositories {
-            maven {
-                url "https://repo.fintlabs.no/releases"
-                credentials {
-                    username = reposiliteUsername
-                    password = reposiliteToken
-                }
-                authentication {
-                    basic(BasicAuthentication)
-                }
-            }
-        }
-        publications {
-            maven(MavenPublication) {
-                from(components.java)
-            }
-        }
-    }
-}
+apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.gradle'
