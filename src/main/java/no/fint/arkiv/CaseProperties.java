@@ -10,6 +10,7 @@ public class CaseProperties {
     private Map<String,String> field;
     private String administrativEnhet;
     private String journalenhet;
+    // TODO Can this be different values for case and registry entry?
     private String arkivdel;
     private String saksansvarlig;
     private String[] noekkelord;
@@ -22,6 +23,8 @@ public class CaseProperties {
     private String avskrivningsmaate;
     private String dokumentstatus;
     private String dokumentType;
+    private String format;
+    private String variantFormat;
     private String tilknyttetRegistreringSom;
     private Skjermingskontekst[] skjermingskontekst;
     private String tilgangsrestriksjon;

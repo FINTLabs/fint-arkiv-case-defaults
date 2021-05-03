@@ -213,7 +213,7 @@ public abstract class CaseDefaultsService {
 
         codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
         if (dokumentbeskrivelse.getDokumentobjekt() != null) {
-            dokumentbeskrivelse.getDokumentobjekt().forEach(codingSystemService::mapCodingSystemLinks);
+            dokumentbeskrivelse.getDokumentobjekt().forEach(dobj -> applyDefaultsForDokumentobjekt(properties, dobj));
         }
         if (isNotBlank(properties.getDokumentstatus()) && isEmpty(dokumentbeskrivelse.getDokumentstatus())) {
             dokumentbeskrivelse.addDokumentstatus(Link.with(
@@ -247,6 +247,31 @@ public abstract class CaseDefaultsService {
         }
 
         codingSystemService.mapCodingSystemLinks(dokumentbeskrivelse);
+    }
+
+    protected void applyDefaultsForDokumentobjekt(CaseProperties properties, DokumentobjektResource dokumentobjekt) {
+        if (isNotBlank(dokumentobjekt.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
+            dokumentobjekt.addFilformat(Link.with(
+                    Format.class,
+                    "systemid",
+                    dokumentobjekt.getFormat()
+            ));
+        }
+        if (isNotBlank(properties.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
+            dokumentobjekt.addFilformat(Link.with(
+                    Format.class,
+                    "systemid",
+                    properties.getFormat()
+            ));
+        }
+        if (isNotBlank(properties.getVariantFormat()) && isEmpty(dokumentobjekt.getVariantFormat())) {
+            dokumentobjekt.addVariantFormat(Link.with(
+                    Variantformat.class,
+                    "systemid",
+                    properties.getVariantFormat()
+            ));
+        }
+        codingSystemService.mapCodingSystemLinks(dokumentobjekt);
     }
 
     protected static <T> boolean contains(T[] array, T value) {

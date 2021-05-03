@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.jfrog.bintray' version '1.8.4'
     id 'com.github.ben-manes.versions' version '0.27.0'
     id 'com.github.kt3k.coveralls' version '2.9.0'
 }
@@ -17,11 +16,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenLocal()
-    jcenter()
     maven {
-        url 'http://dl.bintray.com/fint/maven'
+        url 'https://repo.fintlabs.no/releases'
     }
+    mavenCentral()
+    jcenter()
+    mavenLocal()
 }
 
 
@@ -31,7 +31,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     compile('org.springframework.boot:spring-boot-starter')
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    compile('org.apache.commons:commons-lang3:3.9')
+    compile('org.apache.commons:commons-lang3:3.12.0')
     compile('org.apache.commons:commons-text:1.9')
     compile('commons-beanutils:commons-beanutils:1.9.4')
     compile("no.fint:fint-arkiv-resource-model-java:${apiVersion}")
@@ -56,6 +56,4 @@ bootJar {
     enabled = false
 }
 
-if (project.hasProperty('bintrayUser') && project.hasProperty('bintrayKey')) {
-    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/v1.8.0/bintray.gradle'
-}
+apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.gradle'
