@@ -74,7 +74,7 @@ public class NoarkMetadataService {
     }
 
     public Stream<FormatResource> getFormat() {
-        return getEntries("format")
+        return getEntries("filformat")
                 .map(create(FormatResource::new));
     }
 

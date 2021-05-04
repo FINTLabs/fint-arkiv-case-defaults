@@ -217,7 +217,7 @@
   },
   {
     "kode": "M701",
-    "navn": "format",
+    "navn": "filformat",
     "obligatorisk": false,
     "verdier": {
       "RA-TEKST": "Ren tekst. UTF-8 (ISO/IEC 10646-1:2000 Annex D) eller ISO 8859-1:1998, Latin 1. ISO 8859-1:1998, Latin 1 kan erstattes med ISO 8859-4:1998, Latin 4 for samiske tegn.",
