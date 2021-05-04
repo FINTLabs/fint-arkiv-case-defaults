@@ -26,7 +26,7 @@ public class CodingSystemDefaults {
             skjermingMetadata,
             skjermingDokument,
             gradering,
-            format,
+            filformat,
             variantFormat;
 
 }

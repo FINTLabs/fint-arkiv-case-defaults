@@ -153,7 +153,7 @@ The metadata attributes supported are:
 - `skjermingMetadata` (*)
 - `skjermingDokument` (*)
 - `gradering`
-- `format`  
+- `filformat`
 - `variantFormat`
 
 (Note that the ones marked (*) are not yet implemented)
