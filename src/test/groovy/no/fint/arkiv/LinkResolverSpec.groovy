@@ -18,7 +18,7 @@ class LinkResolverSpec extends Specification {
         given:
         def resolver = Mock(LinkResolver)
         def substitutorService = new SubstitutorService(resolver)
-        def title = new CaseProperties.Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link:matrikkelnummer.kommunenummer#navn}, ${link:matrikkelnummer.kommunenummer#link:fylke#navn} – ${kulturminneId}')
+        def title = new CaseProperties.Title(cases: '${bygningsnavn} – ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} – Tilskudd – ${link$matrikkelnummer.kommunenummer#navn}, ${link$matrikkelnummer.kommunenummer#link$fylke#navn} – ${kulturminneId}')
         def titleService = new TitleService(substitutorService)
         def r = new TilskuddFredaBygningPrivatEieResource(
                 matrikkelnummer: new MatrikkelnummerResource(
@@ -65,7 +65,7 @@ class LinkResolverSpec extends Specification {
         def rolle = new RolleResource(navn: 'TestRolle')
 
         when:
-        def result = subsitutorservice.getSubstitutorForResource(sak).replace('${link:saksansvarlig#link:tilgang#link:rolle#navn}')
+        def result = subsitutorservice.getSubstitutorForResource(sak).replace('${link$saksansvarlig#link$tilgang#link$rolle#navn}')
 
         then:
         result == 'TestRolle'
