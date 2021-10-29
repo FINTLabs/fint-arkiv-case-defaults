@@ -61,12 +61,14 @@ The syntax for this linked property is as follows:
 
 - `${link$name.of.link.property#name.of.property.in.target}`
 
-This can be done in a nested manner, where the right-hand side of `#` contains another `link:xxx#yyy` expression.
+This can be done in a nested manner, where the right-hand side of `#` contains another `link$xxx#yyy` expression.
 
 Examples:
 - On `Saksmappe`, `${link$arkivdel#tittel}` would resolve to the `tittel` attribute of the `Arkivdel` resource linked.
-- On `Saksmappe`, `${link$saksansvarlig#link:tilgang#link:rolle#navn}` would resolve to the role name of the responsible
+- On `Saksmappe`, `${link$saksansvarlig#link$tilgang#link$rolle#navn}` would resolve to the role name of the responsible
   person, following the links from `Saksmappe` via `Arkivressurs` and `Tilgang` to `Rolle`.
+
+*NOTE:* In earlier versions (until 3.1.0) we used colon as delimiter (i.e. `link:`) so beware of that when upgrading!
 
 ## TitleService
 
