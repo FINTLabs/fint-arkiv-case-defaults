@@ -95,4 +95,20 @@ class CaseDefaultsServiceSpec extends Specification {
         !props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.SAK }
         props.skjermingskontekst.any { it == CaseProperties.Skjermingskontekst.JOURNALPOST }
     }
+
+    def "Able to support different journalstatus on different journalpost types"() {
+        when:
+            def properties = caseDefaults.tilskuddfartoy
+        then:
+            properties.journalpost.any {
+                 (it.getKey() <=> CaseProperties.Journalposttype.I)
+                 ("S".equalsIgnoreCase(it.getValue().getStatus()))
+
+                 (it.getKey() <=> CaseProperties.Journalposttype.U)
+                 ("E".equalsIgnoreCase(it.getValue().getStatus()))
+
+                 (it.getKey() <=> CaseProperties.Journalposttype.X)
+                 ("J".equalsIgnoreCase(it.getValue().getStatus()))
+            }
+    }
 }

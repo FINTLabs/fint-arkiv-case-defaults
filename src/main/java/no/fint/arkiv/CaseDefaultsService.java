@@ -153,6 +153,31 @@ public abstract class CaseDefaultsService {
                     "systemid",
                     properties.getJournalstatus()));
         }
+
+        // The new wine, work in progress ...
+        if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus()) && isEmpty(journalpost.getJournalposttype())) {
+            log.debug("The New 🍷 - Work In Progress");
+            properties.getJournalpost().entrySet().stream().map(e-> {
+                final String journalposttype = e.getKey().name();
+                final String journalstatus = e.getValue().getStatus();
+
+                JournalpostResource resource = new JournalpostResource();
+                resource.addJournalposttype(Link.with(
+                        JournalpostType.class,
+                        "systemid",
+                        journalposttype));
+                log.debug("Wohoo, journalposttype: {}", journalposttype);
+
+                resource.addJournalstatus(Link.with(
+                        JournalStatus.class,
+                        "systemid",
+                        journalstatus));
+                log.debug("Wohoo, journalstatus: {}", journalstatus);
+
+                return resource;
+            }).collect(Collectors.toList());
+        }
+
         if (isNotBlank(properties.getJournalenhet()) && isEmpty(journalpost.getJournalenhet())) {
             journalpost.addJournalenhet(Link.with(
                     AdministrativEnhet.class,

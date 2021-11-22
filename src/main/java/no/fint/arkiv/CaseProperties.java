@@ -19,6 +19,7 @@ public class CaseProperties {
     private String korrespondansepartType;
     private String journalpostType;
     private String journalstatus;
+    private Map<Journalposttype, Journalstatus> journalpost;
     private String saksbehandler;
     private String avskrivningsmaate;
     private String dokumentstatus;
@@ -32,6 +33,7 @@ public class CaseProperties {
     private String saksmappeType;
 
     public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
+    public enum Journalposttype {I, U, N, X, S}
 
     @Data
     public static class Title {
@@ -43,4 +45,8 @@ public class CaseProperties {
         private String ordning, verdi, tittel;
     }
 
+    @Data
+    public static class Journalstatus {
+        private String status;
+    }
 }
