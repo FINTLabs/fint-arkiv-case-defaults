@@ -155,8 +155,10 @@ public abstract class CaseDefaultsService {
         }
 
         // The new wine, work in progress ...
-        if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus()) && isEmpty(journalpost.getJournalposttype())) {
-            log.debug("The New 🍷 - Work In Progress");
+        log.debug("The New 🍷 - Work In Progress");
+        log.debug("---> properties.getJournalpost(): {}, journalpost.getJournalstatus(): {}, journalpost.getJournalposttype: {}",
+                properties.getJournalpost(), journalpost.getJournalstatus(), journalpost.getJournalposttype());
+        if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus())) {
             properties.getJournalpost().entrySet().stream().map(e-> {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
