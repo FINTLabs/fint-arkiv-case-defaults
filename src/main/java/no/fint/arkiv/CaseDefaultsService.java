@@ -164,11 +164,13 @@ public abstract class CaseDefaultsService {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
 
-                journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", journalposttype));
-                log.debug("Wohoo, {} vs {} (journalposttype)", journalposttype, journalpost.getJournalposttype());
+                if(isEmpty(journalpost.getJournalposttype())) {
+                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", journalposttype));
+                    log.debug("Journalposttype was empty, added {}", journalposttype);
+                }
 
                 journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
-                log.debug("Wohoo, {} vs {} (journalstatus)", journalstatus, journalpost.getJournalstatus());
+                log.debug("Added journalstatus {}", journalstatus);
 
                 return journalpost;
             }).collect(Collectors.toList());
