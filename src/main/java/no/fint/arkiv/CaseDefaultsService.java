@@ -156,27 +156,21 @@ public abstract class CaseDefaultsService {
 
         // The new wine, work in progress ...
         log.debug("The New 🍷 - Work In Progress");
-        log.debug("---> properties.getJournalpost(): {}, journalpost.getJournalstatus(): {}, journalpost.getJournalposttype: {}",
+        log.debug("--->\nproperties.getJournalpost(): {}--->\njournalpost.getJournalstatus(): {}--->\njournalpost.getJournalposttype: {}",
                 properties.getJournalpost(), journalpost.getJournalstatus(), journalpost.getJournalposttype());
+
         if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus())) {
             properties.getJournalpost().entrySet().stream().map(e-> {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
 
-                JournalpostResource resource = new JournalpostResource();
-                resource.addJournalposttype(Link.with(
-                        JournalpostType.class,
-                        "systemid",
-                        journalposttype));
-                log.debug("Wohoo, journalposttype: {}", journalposttype);
+                journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", journalposttype));
+                log.debug("Wohoo, {} vs {} (journalposttype)", journalposttype, journalpost.getJournalposttype());
 
-                resource.addJournalstatus(Link.with(
-                        JournalStatus.class,
-                        "systemid",
-                        journalstatus));
-                log.debug("Wohoo, journalstatus: {}", journalstatus);
+                journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
+                log.debug("Wohoo, {} vs {} (journalstatus)", journalstatus, journalpost.getJournalstatus());
 
-                return resource;
+                return journalpost;
             }).collect(Collectors.toList());
         }
 
