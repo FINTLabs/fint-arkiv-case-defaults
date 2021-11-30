@@ -165,20 +165,30 @@ public abstract class CaseDefaultsService {
                 properties.getJournalpost(), journalpost.getJournalstatus(), journalpost.getJournalposttype());
 
         if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus())) {
+
+            if (journalpost.getJournalposttype().size() != 1) {
+                log.warn("There might be several ({}) journalposttype's in this journalpost.. We'll use the first one.",
+                        journalpost.getJournalposttype().size());
+            }
+
+            String systemid = StringUtils.substringAfterLast(journalpost.getJournalposttype().get(0).getHref(), "/");
+
             properties.getJournalpost().entrySet().stream().map(e-> {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
+                log.debug("The elements (not Sikri Elements Cloud): {} (journalposttype), {} (journalstatus)",
+                        journalposttype, journalstatus);
 
                 String foo = codingSystemDefaults.getJournalposttype().get(journalposttype);
-                log.debug("Configured (system defaults) journalposttype: {}", foo);
+                log.debug("Configured (system defaults) journalposttype ({}): {}", journalposttype, foo);
 
-                if(isEmpty(journalpost.getJournalposttype()) && StringUtils.isNotBlank(foo)) {
+                if (StringUtils.isNotBlank(foo) && foo.equalsIgnoreCase(systemid)) {
                     journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", foo));
-                    log.debug("Journalposttype was empty, added {} as journalposttype {}", foo, journalposttype);
-                }
+                    log.debug("journalpost.addJournalposttype: {}", foo);
 
-                journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
-                log.debug("Added journalstatus {}. Current journalposttype is: {}", journalstatus, journalposttype);
+                    journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
+                    log.debug("journalpost.addJournalstatus: {}", journalstatus);
+                }
 
                 return journalpost;
             }).collect(Collectors.toList());
