@@ -8,6 +8,7 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +28,10 @@ public abstract class CaseDefaultsService {
 
     @Autowired
     protected SubstitutorService substitutorService;
+
+    @Autowired
+    protected CodingSystemDefaults codingSystemDefaults;
+
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -164,13 +169,16 @@ public abstract class CaseDefaultsService {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
 
-                if(isEmpty(journalpost.getJournalposttype())) {
-                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", journalposttype));
-                    log.debug("Journalposttype was empty, added {}", journalposttype);
+                String foo = codingSystemDefaults.getJournalposttype().get(journalposttype);
+                log.debug("Configured (system defaults) journalposttype: {}", foo);
+
+                if(isEmpty(journalpost.getJournalposttype()) && StringUtils.isNotBlank(foo)) {
+                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", foo));
+                    log.debug("Journalposttype was empty, added {} as journalposttype {}", foo, journalposttype);
                 }
 
                 journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
-                log.debug("Added journalstatus {}", journalstatus);
+                log.debug("Added journalstatus {}. Current journalposttype is: {}", journalstatus, journalposttype);
 
                 return journalpost;
             }).collect(Collectors.toList());
