@@ -25,7 +25,7 @@ applied by the adapter if these values have not been set by the client.
 - `saksstatus`
 - `korrespondansepartType`
 - `journalpostType`
-- `journalstatus`
+- `journalstatus` (or `journalpost`(*))
 - `saksbehandler`
 - `dokumentstatus`
 - `dokumentType`
@@ -36,6 +36,15 @@ applied by the adapter if these values have not been set by the client.
 - `tilgangsrestriksjon`
 - `skjermingshjemmel`
 - `saksmappeType`
+
+(*) From version 4.1.0 it's supported to declare different journalstatuses for different journalposttypes.
+
+Examples:
+- `fint.case.defaults.tilskuddfredabygningprivateie.journalpost.I.status`
+- `fint.case.defaults.tilskuddfredabygningprivateie.journalpost.U.status`
+
+(If you're happy with one status to rule them all, just keep on using `journalstatus` e.g.
+`fint.case.defaults.soknaddrosjeloyve.journalstatus`. If `journalstatus` is declared, the `journalpost` will be ignored.)
 
 ### How to implement in adapter
 

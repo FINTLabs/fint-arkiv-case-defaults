@@ -8,6 +8,7 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +28,10 @@ public abstract class CaseDefaultsService {
 
     @Autowired
     protected SubstitutorService substitutorService;
+
+    @Autowired
+    protected CodingSystemDefaults codingSystemDefaults;
+
 
     public void applyDefaultsForCreation(CaseProperties properties, SaksmappeResource resource) {
         if (properties == null) {
@@ -153,6 +158,38 @@ public abstract class CaseDefaultsService {
                     "systemid",
                     properties.getJournalstatus()));
         }
+
+        if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus())) {
+            log.debug("The New 🍷 - Now supporting different journalstatuses on different journalposttypes 🤙");
+
+            if (journalpost.getJournalposttype().size() != 1) {
+                log.warn("There might be several ({}) journalposttype's in this journalpost.. We'll use the first one.",
+                        journalpost.getJournalposttype().size());
+            }
+
+            String systemid = StringUtils.substringAfterLast(journalpost.getJournalposttype().get(0).getHref(), "/");
+
+            properties.getJournalpost().entrySet().stream().map(e-> {
+                final String journalposttype = e.getKey().name();
+                final String journalstatus = e.getValue().getStatus();
+                log.trace("The elements (not Sikri Elements Cloud): {} (journalposttype), {} (journalstatus)",
+                        journalposttype, journalstatus);
+
+                String jpType = codingSystemDefaults.getJournalposttype().get(journalposttype);
+                log.trace("Configured (system defaults) journalposttype ({}): {}", journalposttype, jpType);
+
+                if (StringUtils.isNotBlank(jpType) && jpType.equalsIgnoreCase(systemid)) {
+                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", jpType));
+                    log.debug("Added journalposttype {} to to this journalpost", jpType);
+
+                    journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
+                    log.debug("Added journalstatus {} to this journalpost", journalstatus);
+                }
+
+                return journalpost;
+            }).collect(Collectors.toList());
+        }
+
         if (isNotBlank(properties.getJournalenhet()) && isEmpty(journalpost.getJournalenhet())) {
             journalpost.addJournalenhet(Link.with(
                     AdministrativEnhet.class,
