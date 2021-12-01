@@ -159,12 +159,8 @@ public abstract class CaseDefaultsService {
                     properties.getJournalstatus()));
         }
 
-        // The new wine, work in progress ...
-        log.debug("The New 🍷 - Work In Progress");
-        log.debug("--->\nproperties.getJournalpost(): {}--->\njournalpost.getJournalstatus(): {}--->\njournalpost.getJournalposttype: {}",
-                properties.getJournalpost(), journalpost.getJournalstatus(), journalpost.getJournalposttype());
-
         if(!isEmpty(properties.getJournalpost()) && isEmpty(journalpost.getJournalstatus())) {
+            log.debug("The New 🍷 - Now supporting different journalstatuses on different journalposttypes 🤙");
 
             if (journalpost.getJournalposttype().size() != 1) {
                 log.warn("There might be several ({}) journalposttype's in this journalpost.. We'll use the first one.",
@@ -176,18 +172,18 @@ public abstract class CaseDefaultsService {
             properties.getJournalpost().entrySet().stream().map(e-> {
                 final String journalposttype = e.getKey().name();
                 final String journalstatus = e.getValue().getStatus();
-                log.debug("The elements (not Sikri Elements Cloud): {} (journalposttype), {} (journalstatus)",
+                log.trace("The elements (not Sikri Elements Cloud): {} (journalposttype), {} (journalstatus)",
                         journalposttype, journalstatus);
 
-                String foo = codingSystemDefaults.getJournalposttype().get(journalposttype);
-                log.debug("Configured (system defaults) journalposttype ({}): {}", journalposttype, foo);
+                String jpType = codingSystemDefaults.getJournalposttype().get(journalposttype);
+                log.trace("Configured (system defaults) journalposttype ({}): {}", journalposttype, jpType);
 
-                if (StringUtils.isNotBlank(foo) && foo.equalsIgnoreCase(systemid)) {
-                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", foo));
-                    log.debug("journalpost.addJournalposttype: {}", foo);
+                if (StringUtils.isNotBlank(jpType) && jpType.equalsIgnoreCase(systemid)) {
+                    journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", jpType));
+                    log.debug("Added journalposttype {} to to this journalpost", jpType);
 
                     journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", journalstatus));
-                    log.debug("journalpost.addJournalstatus: {}", journalstatus);
+                    log.debug("Added journalstatus {} to this journalpost", journalstatus);
                 }
 
                 return journalpost;
