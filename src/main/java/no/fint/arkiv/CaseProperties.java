@@ -32,7 +32,7 @@ public class CaseProperties {
     private String skjermingshjemmel;
     private String saksmappeType;
 
-    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT }
+    public enum Skjermingskontekst { SAK, JOURNALPOST, DOKUMENT, KORRESPONDANSEPART }
     public enum Journalposttype {I, U, N, X, S}
 
     @Data

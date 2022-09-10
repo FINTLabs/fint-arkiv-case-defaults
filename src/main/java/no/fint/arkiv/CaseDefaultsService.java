@@ -37,6 +37,13 @@ public abstract class CaseDefaultsService {
         if (properties == null) {
             return;
         }
+        if (isNotBlank(properties.getSaksmappeType()) && isEmpty(resource.getSaksmappetype())) {
+            resource.addSaksmappetype(Link.with(
+                    Saksmappetype.class,
+                    "systemid",
+                    properties.getSaksmappeType()
+            ));
+        }
         if (isNotBlank(properties.getSaksstatus()) && isEmpty(resource.getSaksstatus())) {
             resource.addSaksstatus(Link.with(
                     Saksstatus.class,
@@ -143,6 +150,16 @@ public abstract class CaseDefaultsService {
                         "systemid",
                         properties.getKorrespondansepartType()));
             }
+
+            if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.KORRESPONDANSEPART)
+                    && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+                    && korrespondanse.getSkjerming() == null) {
+                SkjermingResource skjerming = new SkjermingResource();
+                skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
+                skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
+                korrespondanse.setSkjerming(skjerming);
+            }
+
             codingSystemService.mapCodingSystemLinks(korrespondanse);
         });
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
