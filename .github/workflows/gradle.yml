@@ -38,7 +38,7 @@ jobs:
         arguments: build
     - name: Publish to GitHub Packages
       uses: gradle/gradle-build-action@v2
-      if: github.event_name == "pull_request"
+      if: github.event_name == 'pull_request'
       with:
         arguments: publish
       env:
