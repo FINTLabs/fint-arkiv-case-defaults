@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'com.github.ben-manes.versions' version '0.27.0'
     id 'com.github.kt3k.coveralls' version '2.9.0'
 }
 
@@ -58,7 +58,7 @@ bootJar {
 }
 
 if (version =~ /SNAPSHOT/) {
-    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/1c4e3b4014b22392932a7ab4b51c3ddcc768ef6a/github.gradle'
+    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/0574470a7ee91a901da6917fde36243da60280f6/github.gradle'
 } else {
     apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.ga.gradle'
 }
