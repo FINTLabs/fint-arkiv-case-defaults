@@ -4,6 +4,7 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
 import no.fint.model.resource.arkiv.noark.JournalpostResource
+import no.fint.model.resource.arkiv.noark.SakResource
 import spock.lang.Specification
 
 class TitleServiceSpec extends Specification {
@@ -217,5 +218,32 @@ class TitleServiceSpec extends Specification {
 
         then:
         result == 'XXYYZ - Hestmann - Tilskudd - 22334455-1 - 12345'
+    }
+
+    def 'Handle undefined titles'() {
+        given:
+        def props = new CaseProperties()
+        def r = new SakResource(
+                tittel: 'Jeg er bare en helt vanlig sak'
+        )
+
+        when:
+        def caseTitle = titleService.getCaseTitle(props.title, r)
+
+        then:
+        noExceptionThrown()
+        caseTitle == 'Jeg er bare en helt vanlig sak'
+
+        when:
+        def recordTitle = titleService.getRecordTitlePrefix(props.title, r)
+
+        then:
+        recordTitle == ''
+
+        when:
+        def documentTitle = titleService.getDocumentTitlePrefix(props.title, r)
+
+        then:
+        documentTitle == ''
     }
 }
