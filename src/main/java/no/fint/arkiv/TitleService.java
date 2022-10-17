@@ -26,18 +26,27 @@ public class TitleService {
     }
 
     public <T extends SaksmappeResource> String getCaseTitle(CaseProperties.Title title, T saksmappe) {
+        if (title == null || StringUtils.isBlank(title.getCases())) {
+            return saksmappe.getTittel();
+        }
         String result = evaluateExpression(saksmappe, title.getCases());
         log.debug("Title: '{}'", result);
         return result;
     }
 
     public <T extends SaksmappeResource> String getRecordTitlePrefix(CaseProperties.Title title, T saksmappe) {
+        if (title == null || StringUtils.isBlank(title.getRecords())) {
+            return "";
+        }
         String result = evaluateExpression(saksmappe, title.getRecords());
         log.debug("{} - Record title: '{}'", resourceName(saksmappe), result);
         return prefixFormat(result);
     }
 
     public <T extends SaksmappeResource> String getDocumentTitlePrefix(CaseProperties.Title title, T saksmappe) {
+        if (title == null || StringUtils.isBlank(title.getDocuments())) {
+            return "";
+        }
         String result = evaluateExpression(saksmappe, title.getDocuments());
         log.debug("{} - Document title: '{}'", resourceName(saksmappe), result);
         return prefixFormat(result);

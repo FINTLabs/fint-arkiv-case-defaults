@@ -58,7 +58,7 @@ bootJar {
 }
 
 if (version =~ /SNAPSHOT/) {
-    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/0574470a7ee91a901da6917fde36243da60280f6/github.gradle'
+    apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/github.gradle'
 } else {
     apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.ga.gradle'
 }
