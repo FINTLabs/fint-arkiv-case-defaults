@@ -15,6 +15,7 @@ public class CaseDefaults {
     private CaseProperties
             tilskuddfartoy,
             tilskuddfredabygningprivateie,
+            dispensasjonautomatiskfredakulturminne,
             personalmappe,
             soknaddrosjeloyve;
 }
