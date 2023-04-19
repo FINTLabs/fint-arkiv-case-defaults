@@ -1,11 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.10'
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'com.github.ben-manes.versions' version '0.46.0'
 }
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'org.springframework.boot'
