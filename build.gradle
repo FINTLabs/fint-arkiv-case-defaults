@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
-    id 'com.github.ben-manes.versions' version '0.46.0'
+    id 'com.github.ben-manes.versions' version '0.47.0'
 }
 
 apply plugin: 'java'
