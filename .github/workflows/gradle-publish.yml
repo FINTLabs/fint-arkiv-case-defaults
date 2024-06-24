@@ -34,7 +34,7 @@ jobs:
 
     - name: Parse version from tag
       id: version
-      uses: release-kit/semver@v1
+      uses: release-kit/semver@v2
 
     - name: Publish to GitHub Packages
       uses: gradle/gradle-build-action@v2
