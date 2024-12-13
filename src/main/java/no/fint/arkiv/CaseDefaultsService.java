@@ -143,25 +143,27 @@ public abstract class CaseDefaultsService {
         defaultDate(journalpost::getSendtDato, journalpost::setSendtDato);
 
         codingSystemService.mapCodingSystemLinks(journalpost);
-        journalpost.getKorrespondansepart().forEach(korrespondanse -> {
-            if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
-                korrespondanse.addKorrespondanseparttype(Link.with(
-                        KorrespondansepartType.class,
-                        "systemid",
-                        properties.getKorrespondansepartType()));
-            }
+        if (journalpost.getKorrespondansepart() != null) {
+            journalpost.getKorrespondansepart().forEach(korrespondanse -> {
+                if (isNotBlank(properties.getKorrespondansepartType()) && isEmpty(korrespondanse.getKorrespondanseparttype())) {
+                    korrespondanse.addKorrespondanseparttype(Link.with(
+                            KorrespondansepartType.class,
+                            "systemid",
+                            properties.getKorrespondansepartType()));
+                }
 
-            if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.KORRESPONDANSEPART)
-                    && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
-                    && korrespondanse.getSkjerming() == null) {
-                SkjermingResource skjerming = new SkjermingResource();
-                skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
-                skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
-                korrespondanse.setSkjerming(skjerming);
-            }
+                if (contains(properties.getSkjermingskontekst(), CaseProperties.Skjermingskontekst.KORRESPONDANSEPART)
+                        && isNoneBlank(properties.getTilgangsrestriksjon(), properties.getSkjermingshjemmel())
+                        && korrespondanse.getSkjerming() == null) {
+                    SkjermingResource skjerming = new SkjermingResource();
+                    skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", properties.getTilgangsrestriksjon()));
+                    skjerming.addSkjermingshjemmel(Link.with(Skjermingshjemmel.class, "systemid", properties.getSkjermingshjemmel()));
+                    korrespondanse.setSkjerming(skjerming);
+                }
 
-            codingSystemService.mapCodingSystemLinks(korrespondanse);
-        });
+                codingSystemService.mapCodingSystemLinks(korrespondanse);
+            });
+        }
         journalpost.getDokumentbeskrivelse().forEach(dokumentbeskrivelse -> applyDefaultsForDokument(properties, dokumentbeskrivelse));
         if (isNotBlank(properties.getJournalpostType()) && isEmpty(journalpost.getJournalposttype())) {
             journalpost.addJournalposttype(Link.with(
