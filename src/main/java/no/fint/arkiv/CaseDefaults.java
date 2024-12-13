@@ -17,5 +17,6 @@ public class CaseDefaults {
             tilskuddfredabygningprivateie,
             dispensasjonautomatiskfredakulturminne,
             personalmappe,
-            soknaddrosjeloyve;
+            soknaddrosjeloyve,
+            sak;
 }

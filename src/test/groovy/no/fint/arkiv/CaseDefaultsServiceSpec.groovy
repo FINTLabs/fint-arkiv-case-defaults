@@ -111,4 +111,11 @@ class CaseDefaultsServiceSpec extends Specification {
                  ("J".equalsIgnoreCase(it.getValue().getStatus()))
             }
     }
+
+    def "Able to support journalenhet on sak"() {
+        when:
+        def properties = caseDefaults.sak
+        then:
+        properties.journalenhet.equalsIgnoreCase("PM")
+    }
 }

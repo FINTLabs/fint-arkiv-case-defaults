@@ -7,6 +7,7 @@ applied by the adapter if these values have not been set by the client.
 
 ## Case Types
 
+- `sak`
 - `tilskuddfartoy`
 - `tilskuddfredabygningprivateie`
 - `personalmappe`
