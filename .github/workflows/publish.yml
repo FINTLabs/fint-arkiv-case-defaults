@@ -28,7 +28,7 @@ jobs:
         distribution: 'corretto'
 
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         arguments: build
 
@@ -37,7 +37,7 @@ jobs:
       uses: release-kit/semver@v2
 
     - name: Publish to GitHub Packages
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         arguments: |
           -Pversion=${{ steps.version.outputs.full }}
