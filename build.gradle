@@ -30,7 +30,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.commons:commons-text:1.13.0'
-    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    implementation 'commons-beanutils:commons-beanutils:1.10.0'
     implementation "no.fint:fint-arkiv-resource-model-java:${apiVersion}"
 
     testImplementation 'cglib:cglib-nodep:3.3.0'
