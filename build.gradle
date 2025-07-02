@@ -35,6 +35,7 @@ dependencies {
 
     testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'org.spockframework:spock-spring:2.2-groovy-4.0'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.spockframework:spock-core:2.2-groovy-4.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
