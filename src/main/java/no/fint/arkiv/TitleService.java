@@ -1,7 +1,7 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.arkiv.noark.SaksmappeResource;
+import no.novari.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;

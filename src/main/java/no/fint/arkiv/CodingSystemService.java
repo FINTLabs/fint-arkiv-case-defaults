@@ -1,8 +1,8 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.Link;
+import no.novari.fint.model.resource.FintLinks;
+import no.novari.fint.model.resource.Link;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

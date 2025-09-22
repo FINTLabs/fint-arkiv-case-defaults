@@ -1,7 +1,7 @@
 package no.fint.arkiv
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import org.apache.commons.text.StringSubstitutor
 import spock.lang.Specification
 

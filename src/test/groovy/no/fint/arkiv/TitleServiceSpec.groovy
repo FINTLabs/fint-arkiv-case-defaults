@@ -1,10 +1,10 @@
 package no.fint.arkiv
 
-import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
-import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
-import no.fint.model.resource.arkiv.noark.JournalpostResource
-import no.fint.model.resource.arkiv.noark.SakResource
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.novari.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.novari.fint.model.resource.arkiv.noark.JournalpostResource
+import no.novari.fint.model.resource.arkiv.noark.SakResource
 import spock.lang.Specification
 
 class TitleServiceSpec extends Specification {

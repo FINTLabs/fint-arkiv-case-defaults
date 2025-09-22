@@ -1,8 +1,8 @@
 package no.fint.arkiv
 
-import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
-import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
+import no.novari.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
 import spock.lang.Specification
 
 class ClassificationSpec extends Specification {
