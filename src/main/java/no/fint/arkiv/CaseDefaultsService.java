@@ -1,13 +1,13 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.arkiv.kodeverk.*;
-import no.fint.model.arkiv.noark.AdministrativEnhet;
-import no.fint.model.arkiv.noark.Arkivdel;
-import no.fint.model.arkiv.noark.Arkivressurs;
-import no.fint.model.arkiv.noark.Klassifikasjonssystem;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.*;
+import no.novari.fint.model.arkiv.kodeverk.*;
+import no.novari.fint.model.arkiv.noark.AdministrativEnhet;
+import no.novari.fint.model.arkiv.noark.Arkivdel;
+import no.novari.fint.model.arkiv.noark.Arkivressurs;
+import no.novari.fint.model.arkiv.noark.Klassifikasjonssystem;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.noark.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -306,13 +306,6 @@ public abstract class CaseDefaultsService {
     }
 
     protected void applyDefaultsForDokumentobjekt(CaseProperties properties, DokumentobjektResource dokumentobjekt) {
-        if (isNotBlank(dokumentobjekt.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
-            dokumentobjekt.addFilformat(Link.with(
-                    Format.class,
-                    "systemid",
-                    dokumentobjekt.getFormat()
-            ));
-        }
         if (isNotBlank(properties.getFormat()) && isEmpty(dokumentobjekt.getFilformat())) {
             dokumentobjekt.addFilformat(Link.with(
                     Format.class,
