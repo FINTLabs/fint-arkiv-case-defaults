@@ -1,7 +1,7 @@
 package no.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.Link;
+import no.novari.fint.model.resource.Link;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;

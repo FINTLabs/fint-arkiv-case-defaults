@@ -1,15 +1,15 @@
 package no.fint.arkiv
 
 
-import no.fint.model.resource.Link
-import no.fint.model.resource.arkiv.kodeverk.RolleResource
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
-import no.fint.model.resource.arkiv.noark.ArkivressursResource
-import no.fint.model.resource.arkiv.noark.SakResource
-import no.fint.model.resource.arkiv.noark.TilgangResource
-import no.fint.model.resource.felles.kodeverk.FylkeResource
-import no.fint.model.resource.felles.kodeverk.KommuneResource
-import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.novari.fint.model.resource.Link
+import no.novari.fint.model.resource.arkiv.kodeverk.RolleResource
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
+import no.novari.fint.model.resource.arkiv.noark.ArkivressursResource
+import no.novari.fint.model.resource.arkiv.noark.SakResource
+import no.novari.fint.model.resource.arkiv.noark.TilgangResource
+import no.novari.fint.model.resource.felles.kodeverk.FylkeResource
+import no.novari.fint.model.resource.felles.kodeverk.KommuneResource
+import no.novari.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
 import spock.lang.Specification
 
 class LinkResolverSpec extends Specification {
