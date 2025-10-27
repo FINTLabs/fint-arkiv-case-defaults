@@ -1,4 +1,4 @@
-package no.fint.arkiv;
+package no.novari.fint.arkiv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;

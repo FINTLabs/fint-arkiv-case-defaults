@@ -1,4 +1,4 @@
-package no.fint.arkiv
+package no.novari.fint.arkiv
 
 
 import no.fint.model.resource.Link
@@ -10,6 +10,10 @@ import no.fint.model.resource.arkiv.noark.TilgangResource
 import no.fint.model.resource.felles.kodeverk.FylkeResource
 import no.fint.model.resource.felles.kodeverk.KommuneResource
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.novari.fint.arkiv.CaseProperties
+import no.novari.fint.arkiv.LinkResolver
+import no.novari.fint.arkiv.SubstitutorService
+import no.novari.fint.arkiv.TitleService
 import spock.lang.Specification
 
 class LinkResolverSpec extends Specification {

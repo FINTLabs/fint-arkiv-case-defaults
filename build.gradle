@@ -10,6 +10,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
+group = 'no.novari'
 
 java {
     toolchain {

@@ -1,4 +1,4 @@
-package no.fint.arkiv;
+package no.novari.fint.arkiv;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.Link;

@@ -1,8 +1,12 @@
-package no.fint.arkiv
+package no.novari.fint.arkiv
 
 import no.fint.model.felles.kompleksedatatyper.Identifikator
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.novari.fint.arkiv.CaseDefaultsService
+import no.novari.fint.arkiv.CaseProperties
+import no.novari.fint.arkiv.LinkResolver
+import no.novari.fint.arkiv.SubstitutorService
 import spock.lang.Specification
 
 class ClassificationSpec extends Specification {

@@ -1,4 +1,4 @@
-package no.fint.arkiv;
+package no.novari.fint.arkiv;
 
 import lombok.Data;
 
