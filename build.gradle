@@ -64,6 +64,7 @@ tasks.named('test') {
 }
 
 jar {
+    archiveClassifier.set('')
     enabled = true
 }
 
