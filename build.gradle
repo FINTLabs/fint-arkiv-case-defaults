@@ -54,6 +54,10 @@ jacocoTestReport {
     }
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
 jar {
     enabled = true
 }
