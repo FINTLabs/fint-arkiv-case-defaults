@@ -18,6 +18,11 @@ java {
     }
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+    options.compilerArgs += ['-Xlint:-options']
+}
+
 repositories {
     maven {
         url 'https://repo.fintlabs.no/releases'
