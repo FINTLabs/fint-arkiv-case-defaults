@@ -1,4 +1,4 @@
-package no.fint.arkiv;
+package no.novari.fint.arkiv;
 
 import lombok.Data;
 
@@ -24,6 +24,9 @@ public class CaseProperties {
     private String avskrivningsmaate;
     private String dokumentstatus;
     private String dokumentType;
+    // TODO Format is not a valid 4.0 property, the new is filformat. See references below.
+    // https://informasjonsmodell.felleskomponent.no/docs/noark_dokumentobjekt?v=v3.21.10
+    // https://informasjonsmodell.felleskomponent.no/docs/noark_dokumentobjekt?v=v4.0.0
     private String format;
     private String variantFormat;
     private String tilknyttetRegistreringSom;

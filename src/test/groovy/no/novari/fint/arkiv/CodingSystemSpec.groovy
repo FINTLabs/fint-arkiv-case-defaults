@@ -1,11 +1,14 @@
-package no.fint.arkiv
+package no.novari.fint.arkiv
 
-import no.fint.model.arkiv.kodeverk.*
-import no.fint.model.resource.Link
-import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
-import no.fint.model.resource.arkiv.noark.JournalpostResource
-import no.fint.model.resource.arkiv.noark.KorrespondansepartResource
-import no.fint.model.resource.arkiv.noark.SakResource
+import no.novari.fint.model.arkiv.kodeverk.*
+import no.novari.fint.model.resource.Link
+import no.novari.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource
+import no.novari.fint.model.resource.arkiv.noark.JournalpostResource
+import no.novari.fint.model.resource.arkiv.noark.KorrespondansepartResource
+import no.novari.fint.model.resource.arkiv.noark.SakResource
+import no.novari.fint.arkiv.CodingSystemDefaults
+import no.novari.fint.arkiv.CodingSystemService
+import no.novari.fint.arkiv.NoarkMetadataService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
