@@ -1,8 +1,8 @@
 package no.novari.fint.arkiv
 
-import no.fint.model.arkiv.kodeverk.*
-import no.fint.model.resource.Link
-import no.fint.model.resource.arkiv.noark.*
+import no.novari.fint.model.arkiv.kodeverk.*
+import no.novari.fint.model.resource.Link
+import no.novari.fint.model.resource.arkiv.noark.*
 import no.novari.fint.arkiv.CaseDefaults
 import no.novari.fint.arkiv.CaseDefaultsService
 import no.novari.fint.arkiv.CaseProperties

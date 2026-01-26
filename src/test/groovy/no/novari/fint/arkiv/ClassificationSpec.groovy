@@ -1,8 +1,8 @@
 package no.novari.fint.arkiv
 
-import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
-import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource
+import no.novari.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
 import no.novari.fint.arkiv.CaseDefaultsService
 import no.novari.fint.arkiv.CaseProperties
 import no.novari.fint.arkiv.LinkResolver
