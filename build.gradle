@@ -49,9 +49,9 @@ dependencies {
     testImplementation 'org.codehaus.groovy:groovy'
 
     testImplementation 'cglib:cglib-nodep:3.3.0'
-    testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-spring:2.4-groovy-3.0'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.4-groovy-3.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
